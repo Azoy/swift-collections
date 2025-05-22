@@ -9,7 +9,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension StringProtocol {
   @inline(__always)
   var _indexOfLastCharacter: Index {
@@ -45,7 +45,7 @@ extension StringProtocol {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension String {
   internal func _lpad(to width: Int, with pad: Character = " ") -> String {
     let c = self.count
@@ -61,7 +61,7 @@ extension String {
 }
 
 #if swift(>=5.8) // _CharacterRecognizer
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension String {
   @discardableResult
   mutating func _appendQuotedProtectingLeft(

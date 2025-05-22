@@ -9,13 +9,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=5.8)
-
-@available(macOS 9999, *)
-extension BigString {
-  public func _dump(heightLimit: Int = .max) {
-    _rope._dump(heightLimit: heightLimit)
+extension FixedWidthInteger {
+  static var range: ClosedRange<Self> {
+    Self.min ... Self.max
   }
 }
 
-#endif
+extension ClosedRange where Bound: BinaryInteger {
+  @inline(__always)
+  func contains<Other: BinaryInteger>(_ other: Other) -> Bool {
+    other >= lowerBound && other <= upperBound
+  }
+}

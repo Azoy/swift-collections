@@ -11,10 +11,10 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 internal typealias _CharacterRecognizer = Unicode._CharacterRecognizer
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension _CharacterRecognizer {
   internal func _isKnownEqual(to other: Self) -> Bool {
     // FIXME: Enable when Swift 5.9 ships.
@@ -28,7 +28,7 @@ extension _CharacterRecognizer {
 }
 
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension _CharacterRecognizer {
   mutating func firstBreak(
     in str: Substring
@@ -57,9 +57,13 @@ extension _CharacterRecognizer {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension _CharacterRecognizer {
-  init(partialCharacter: Substring.UnicodeScalarView) {
+  init(partialCharacter: BigString._Chunk.UnicodeScalarView) {
+    self.init(partialCharacter: partialCharacter[...])
+  }
+
+  init(partialCharacter: Slice<BigString._Chunk.UnicodeScalarView>) {
     self.init()
     var it = partialCharacter.makeIterator()
     guard let first = it.next() else { return }
@@ -70,31 +74,13 @@ extension _CharacterRecognizer {
     }
   }
   
-  init(partialCharacter: Substring) {
-    self.init(partialCharacter: partialCharacter.unicodeScalars)
-  }
-
-  mutating func consumePartialCharacter(_ s: String) {
-    for scalar in s.unicodeScalars {
-      let b = hasBreak(before: scalar)
-      assert(!b)
-    }
-  }
-
-  mutating func consumePartialCharacter(_ s: Substring) {
-    for scalar in s.unicodeScalars {
-      let b = hasBreak(before: scalar)
-      assert(!b)
-    }
-  }
-  
-  mutating func consumePartialCharacter(_ s: Substring.UnicodeScalarView) {
+  mutating func consumePartialCharacter(_ s: BigString._Chunk.UnicodeScalarView) {
     for scalar in s {
       let b = hasBreak(before: scalar)
       assert(!b)
     }
   }
-  
+
   mutating func consumeUntilFirstBreak(
     in s: Substring.UnicodeScalarView,
     from i: inout String.Index
@@ -144,16 +130,17 @@ extension _CharacterRecognizer {
   mutating func consume(
     _ chunk: BigString._Chunk, upTo index: String.Index
   ) -> (firstBreak: String.Index, prevBreak: String.Index)? {
-    let index = chunk.string.unicodeScalars._index(roundingDown: index)
-    let first = chunk.firstBreak
-    guard index > first else {
-      consumePartialCharacter(chunk.string[..<index])
-      return nil
-    }
-    let last = chunk.lastBreak
-    let prev = index <= last ? chunk.string[first...].index(before: index) : last
-    consumePartialCharacter(chunk.string[prev..<index])
-    return (first, prev)
+//    let index = chunk.unicodeScalars._index(roundingDown: index)
+//    let first = chunk.firstBreak
+//    guard index > first else {
+//      consumePartialCharacter(chunk.string[..<index])
+//      return nil
+//    }
+//    let last = chunk.lastBreak
+//    let prev = index <= last ? chunk.string[first...].index(before: index) : last
+//    consumePartialCharacter(chunk.string[prev..<index])
+//    return (first, prev)
+    fatalError("FIXME")
   }
   
   mutating func edgeCounts(

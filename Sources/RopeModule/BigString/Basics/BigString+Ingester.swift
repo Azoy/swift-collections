@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   func _ingester(
     forInserting input: __owned Substring,
@@ -24,7 +24,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   internal struct _Ingester {
     typealias _Chunk = BigString._Chunk
@@ -118,7 +118,7 @@ extension BigString {
     
     mutating func nextChunk(maxUTF8Count: Int = _Chunk.maxUTF8Count) -> _Chunk? {
       guard let slice = nextSlice(maxUTF8Count: maxUTF8Count) else { return nil }
-      return _Chunk(slice)
+      return _Chunk.create(slice)
     }
     
     static func desiredNextChunkSize(remaining: Int) -> Int {
@@ -138,12 +138,12 @@ extension BigString {
     
     mutating func nextWellSizedChunk(suffix: Int = 0) -> _Chunk? {
       guard let slice = nextWellSizedSlice(suffix: suffix) else { return nil }
-      return _Chunk(slice)
+      return _Chunk.create(slice)
     }
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension String {
   func _nextSlice(
     after i: Index,
@@ -156,17 +156,6 @@ extension String {
     let end = self.utf8.index(i, offsetBy: maxUTF8Count, limitedBy: limit) ?? limit
     let j = self.unicodeScalars._index(roundingDown: end)
     return Range(uncheckedBounds: (i, j))
-  }
-}
-
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
-extension BigString._Chunk {
-  init(_ string: String) {
-    guard !string.isEmpty else { self.init(); return }
-    assert(string.utf8.count <= Self.maxUTF8Count)
-    var ingester = BigString._Ingester(string)
-    self = ingester.nextChunk()!
-    assert(ingester.isAtEnd)
   }
 }
 

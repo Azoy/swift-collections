@@ -11,16 +11,15 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString._Chunk: RopeElement {
   typealias Summary = BigString.Summary
-  typealias Index = String.Index
 
   var summary: BigString.Summary {
     Summary(self)
   }
 
-  var isEmpty: Bool { string.isEmpty }
+  var isEmpty: Bool { utf8Count == 0 }
 
   var isUndersized: Bool { utf8Count < Self.minUTF8Count }
 
@@ -57,101 +56,106 @@ extension BigString._Chunk: RopeElement {
 #endif
   }
 
-  mutating func rebalance(nextNeighbor right: inout Self) -> Bool {
-    if self.isEmpty {
-      swap(&self, &right)
-      return true
-    }
-    guard !right.isEmpty else { return true }
-    guard self.isUndersized || right.isUndersized else { return false }
-    let sum = self.utf8Count + right.utf8Count
-    let desired = BigString._Ingester.desiredNextChunkSize(remaining: sum)
-
-    precondition(desired != self.utf8Count)
-    if desired < self.utf8Count {
-      let i = self.string._utf8Index(at: desired)
-      let j = self.string.unicodeScalars._index(roundingDown: i)
-      Self._redistributeData(&self, &right, splittingLeftAt: j)
-    } else {
-      let i = right.string._utf8Index(at: desired - self.utf8Count)
-      let j = right.string.unicodeScalars._index(roundingDown: i)
-      Self._redistributeData(&self, &right, splittingRightAt: j)
-    }
-    assert(right.isEmpty || (!self.isUndersized && !right.isUndersized))
-    return right.isEmpty
+  func rebalance(nextNeighbor right: inout BigString._Chunk) -> Bool {
+//    if self.isEmpty {
+//      swap(&self, &right)
+//      return true
+//    }
+//    guard !right.isEmpty else { return true }
+//    guard self.isUndersized || right.isUndersized else { return false }
+//    let sum = self.utf8Count + right.utf8Count
+//    let desired = BigString._Ingester.desiredNextChunkSize(remaining: sum)
+//
+//    precondition(desired != self.utf8Count)
+//    if desired < self.utf8Count {
+//      let i = self.string._utf8Index(at: desired)
+//      let j = self.string.unicodeScalars._index(roundingDown: i)
+//      Self._redistributeData(&self, &right, splittingLeftAt: j)
+//    } else {
+//      let i = right.string._utf8Index(at: desired - self.utf8Count)
+//      let j = right.string.unicodeScalars._index(roundingDown: i)
+//      Self._redistributeData(&self, &right, splittingRightAt: j)
+//    }
+//    assert(right.isEmpty || (!self.isUndersized && !right.isUndersized))
+//    return right.isEmpty
+    fatalError("FIXME")
   }
 
-  mutating func rebalance(prevNeighbor left: inout Self) -> Bool {
-    if self.isEmpty {
-      swap(&self, &left)
-      return true
-    }
-    guard !left.isEmpty else { return true }
-    guard left.isUndersized || self.isUndersized else { return false }
-    let sum = left.utf8Count + self.utf8Count
-    let desired = BigString._Ingester.desiredNextChunkSize(remaining: sum)
-
-    precondition(desired != self.utf8Count)
-    if desired < self.utf8Count {
-      let i = self.string._utf8Index(at: self.utf8Count - desired)
-      let j = self.string.unicodeScalars._index(roundingDown: i)
-      let k = (i == j ? i : self.string.unicodeScalars.index(after: j))
-      Self._redistributeData(&left, &self, splittingRightAt: k)
-    } else {
-      let i = left.string._utf8Index(at: left.utf8Count + self.utf8Count - desired)
-      let j = left.string.unicodeScalars._index(roundingDown: i)
-      let k = (i == j ? i : left.string.unicodeScalars.index(after: j))
-      Self._redistributeData(&left, &self, splittingLeftAt: k)
-    }
-    assert(left.isEmpty || (!left.isUndersized && !self.isUndersized))
-    return left.isEmpty
+  func rebalance(prevNeighbor left: inout BigString._Chunk) -> Bool {
+//    if self.isEmpty {
+//      swap(&self, &left)
+//      return true
+//    }
+//    guard !left.isEmpty else { return true }
+//    guard left.isUndersized || self.isUndersized else { return false }
+//    let sum = left.utf8Count + self.utf8Count
+//    let desired = BigString._Ingester.desiredNextChunkSize(remaining: sum)
+//
+//    precondition(desired != self.utf8Count)
+//    if desired < self.utf8Count {
+//      let i = self.string._utf8Index(at: self.utf8Count - desired)
+//      let j = self.string.unicodeScalars._index(roundingDown: i)
+//      let k = (i == j ? i : self.string.unicodeScalars.index(after: j))
+//      Self._redistributeData(&left, &self, splittingRightAt: k)
+//    } else {
+//      let i = left.string._utf8Index(at: left.utf8Count + self.utf8Count - desired)
+//      let j = left.string.unicodeScalars._index(roundingDown: i)
+//      let k = (i == j ? i : left.string.unicodeScalars.index(after: j))
+//      Self._redistributeData(&left, &self, splittingLeftAt: k)
+//    }
+//    assert(left.isEmpty || (!left.isUndersized && !self.isUndersized))
+//    return left.isEmpty
+    fatalError("FIXME")
   }
 
-  mutating func split(at i: String.Index) -> Self {
-    assert(i == string.unicodeScalars._index(roundingDown: i))
-    let c = splitCounts(at: i)
-    let new = Self(string[i...], c.right)
-    self = Self(string[..<i], c.left)
-    return new
+  func split(at i: BigString._Chunk.Index) -> Self {
+//    assert(i == unicodeScalars._index(roundingDown: i))
+//    let c = splitCounts(at: i)
+//    let new = Self(string[i...], c.right)
+//    self = Self(string[..<i], c.left)
+//    return new
+    fatalError("FIXME")
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString._Chunk {
   static func _redistributeData(
-    _ left: inout Self,
-    _ right: inout Self,
+    _ left: inout BigString._Chunk,
+    _ right: inout BigString._Chunk,
     splittingRightAt i: String.Index
   ) {
-    assert(i == right.string.unicodeScalars._index(roundingDown: i))
-    assert(i > right.string.startIndex)
-    guard i < right.string.endIndex else {
-      left.append(right)
-      right.clear()
-      return
-    }
-    let counts = right.splitCounts(at: i)
-    left._append(right.string[..<i], counts.left)
-    right = Self(right.string[i...], counts.right)
+//    assert(i == right.string.unicodeScalars._index(roundingDown: i))
+//    assert(i > right.string.startIndex)
+//    guard i < right.string.endIndex else {
+//      left.append(right)
+//      right.clear()
+//      return
+//    }
+//    let counts = right.splitCounts(at: i)
+//    left._append(right.string[..<i], counts.left)
+//    right = Self(right.string[i...], counts.right)
+    fatalError("FIXME")
   }
 
   static func _redistributeData(
-    _ left: inout Self,
-    _ right: inout Self,
-    splittingLeftAt i: String.Index
+    _ left: inout BigString._Chunk,
+    _ right: inout BigString._Chunk,
+    splittingLeftAt i: BigString._Chunk.Index
   ) {
-    assert(i == left.string.unicodeScalars._index(roundingDown: i))
-
-    assert(i < left.string.endIndex)
-    guard i > left.string.startIndex else {
-      left.append(right)
-      right.clear()
-      swap(&left, &right)
-      return
-    }
-    let counts = left.splitCounts(at: i)
-    right._prepend(left.string[i...], counts.right)
-    left = Self(left.string[..<i], counts.left)
+//    assert(i == left.string.unicodeScalars._index(roundingDown: i))
+//
+//    assert(i < left.string.endIndex)
+//    guard i > left.string.startIndex else {
+//      left.append(right)
+//      right.clear()
+//      swap(&left, &right)
+//      return
+//    }
+//    let counts = left.splitCounts(at: i)
+//    right._prepend(left.string[i...], counts.right)
+//    left = Self(left.string[..<i], counts.left)
+    fatalError("FIXME")
   }
 }
 

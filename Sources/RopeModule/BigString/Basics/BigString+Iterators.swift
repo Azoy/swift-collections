@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   struct ChunkIterator {
     var base: _Rope.Iterator
@@ -26,12 +26,13 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.ChunkIterator: IteratorProtocol {
   typealias Element = String
 
   mutating func next() -> String? {
-    base.next()?.string
+//    base.next()?.string
+    fatalError("FIXME")
   }
 }
 

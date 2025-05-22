@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   public struct UTF8View: Sendable {
     var _base: BigString
@@ -32,7 +32,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View: Equatable {
   public static func ==(left: Self, right: Self) -> Bool {
     BigString.utf8IsEqual(left._base, to: right._base)
@@ -43,14 +43,14 @@ extension BigString.UTF8View: Equatable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View: Hashable {
   public func hash(into hasher: inout Hasher) {
     _base.hashUTF8(into: &hasher)
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View: Sequence {
   public typealias Element = UInt8
 
@@ -69,67 +69,69 @@ extension BigString.UTF8View: Sequence {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View.Iterator: IteratorProtocol {
   public typealias Element = UInt8
 
   public mutating func next() -> UInt8? {
-    guard _index < _base.endIndex else { return nil }
-    // Hand-optimized from `_base.subscript(utf8:)` and `_base.utf8Index(after:)`.
-    let ri = _index._rope!
-    var ci = _index._chunkIndex
-    let chunk = _base._rope[ri]
-    let result = chunk.string.utf8[ci]
-
-    chunk.string.utf8.formIndex(after: &ci)
-    if ci < chunk.string.endIndex {
-      _index = BigString.Index(baseUTF8Offset: _index._utf8BaseOffset, _rope: ri, chunk: ci)
-    } else {
-      _index = BigString.Index(
-        baseUTF8Offset: _index._utf8BaseOffset + chunk.utf8Count,
-        _rope: _base._rope.index(after: ri),
-        chunk: String.Index(_utf8Offset: 0))
-    }
-    return result
+//    guard _index < _base.endIndex else { return nil }
+//    // Hand-optimized from `_base.subscript(utf8:)` and `_base.utf8Index(after:)`.
+//    let ri = _index._rope!
+//    var ci = _index._chunkIndex
+//    let chunk = _base._rope[ri]
+//    let result = chunk.string.utf8[ci]
+//
+//    chunk.string.utf8.formIndex(after: &ci)
+//    if ci < chunk.string.endIndex {
+//      _index = BigString.Index(baseUTF8Offset: _index._utf8BaseOffset, _rope: ri, chunk: ci)
+//    } else {
+//      _index = BigString.Index(
+//        baseUTF8Offset: _index._utf8BaseOffset + chunk.utf8Count,
+//        _rope: _base._rope.index(after: ri),
+//        chunk: String.Index(_utf8Offset: 0))
+//    }
+//    return result
+    fatalError("FIXME")
   }
 
   public mutating func next<R>(
     maximumCount: Int,
     with body: (UnsafeBufferPointer<UInt8>) -> (consumed: Int, result: R)
   ) -> R {
-    guard _index < _base.endIndex else {
-      let r = body(UnsafeBufferPointer(start: nil, count: 0))
-      precondition(r.consumed == 0)
-      return r.result
-    }
-    let ri = _index._rope!
-    var ci = _index._utf8ChunkOffset
-    var utf8Offset = _index.utf8Offset
-    var string = _base._rope[ri].string
-    let (haveMore, result) = string.withUTF8 { buffer in
-      let slice = buffer[ci...].prefix(maximumCount)
-      assert(!slice.isEmpty)
-      let (consumed, result) = body(UnsafeBufferPointer(rebasing: slice))
-      precondition(consumed >= 0 && consumed <= slice.count)
-      utf8Offset += consumed
-      ci += consumed
-      return (ci < buffer.count, result)
-    }
-    if haveMore {
-      _index = BigString.Index(_utf8Offset: utf8Offset, _rope: ri, chunkOffset: ci)
-    } else {
-      _index = BigString.Index(
-        baseUTF8Offset: _index._utf8BaseOffset + string.utf8.count,
-        _rope: _base._rope.index(after: ri),
-        chunk: String.Index(_utf8Offset: 0))
-    }
-    return result
+//    guard _index < _base.endIndex else {
+//      let r = body(UnsafeBufferPointer(start: nil, count: 0))
+//      precondition(r.consumed == 0)
+//      return r.result
+//    }
+//    let ri = _index._rope!
+//    var ci = _index._utf8ChunkOffset
+//    var utf8Offset = _index.utf8Offset
+//    var string = _base._rope[ri].string
+//    let (haveMore, result) = string.withUTF8 { buffer in
+//      let slice = buffer[ci...].prefix(maximumCount)
+//      assert(!slice.isEmpty)
+//      let (consumed, result) = body(UnsafeBufferPointer(rebasing: slice))
+//      precondition(consumed >= 0 && consumed <= slice.count)
+//      utf8Offset += consumed
+//      ci += consumed
+//      return (ci < buffer.count, result)
+//    }
+//    if haveMore {
+//      _index = BigString.Index(_utf8Offset: utf8Offset, _rope: ri, chunkOffset: ci)
+//    } else {
+//      _index = BigString.Index(
+//        baseUTF8Offset: _index._utf8BaseOffset + string.utf8.count,
+//        _rope: _base._rope.index(after: ri),
+//        chunk: String.Index(_utf8Offset: 0))
+//    }
+//    return result
+    fatalError("FIXME")
   }
 }
 
 
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View: BidirectionalCollection {
   public typealias Index = BigString.Index
   public typealias SubSequence = BigSubstring.UTF8View
@@ -174,7 +176,7 @@ extension BigString.UTF8View: BidirectionalCollection {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF8View {
   public func index(roundingDown i: Index) -> Index {
     _base._utf8Index(roundingDown: i)

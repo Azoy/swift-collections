@@ -11,28 +11,31 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension UInt8 {
   /// Returns true if this is a leading code unit in the UTF-8 encoding of a Unicode scalar that
   /// is outside the BMP.
   var _isUTF8NonBMPLeadingCodeUnit: Bool { self >= 0b11110000 }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString._Chunk {
-  func characterDistance(from start: String.Index, to end: String.Index) -> Int {
+  func characterDistance(
+    from start: BigString._Chunk.Index,
+    to end: BigString._Chunk.Index
+  ) -> Int {
     let firstBreak = self.firstBreak
     let (start, a) = start < firstBreak ? (firstBreak, 1) : (start, 0)
     let (end, b) = end < firstBreak ? (firstBreak, 1) : (end, 0)
-    let d = wholeCharacters.distance(from: start, to: end)
+    let d = characters.distance(from: start, to: end)
     return d + a - b
   }
 
   /// If this returns false, the next position is on the first grapheme break following this
   /// chunk.
-  func formCharacterIndex(after i: inout String.Index) -> Bool {
+  func formCharacterIndex(after i: inout BigString._Chunk.Index) -> Bool {
     if i >= lastBreak {
-      i = string.endIndex
+      i = utf8.endIndex
       return false
     }
     let first = firstBreak
@@ -40,7 +43,7 @@ extension BigString._Chunk {
       i = first
       return true
     }
-    wholeCharacters.formIndex(after: &i)
+    characters.formIndex(after: &i)
     return true
   }
 
@@ -48,23 +51,24 @@ extension BigString._Chunk {
   /// following this chunk if `distance` was originally positive. Otherwise the right position is
   /// `-distance` steps from the first grapheme break preceding this chunk.
   func formCharacterIndex(
-    _ i: inout String.Index, offsetBy distance: inout Int
+    _ i: inout Index,
+    offsetBy distance: inout Int
   ) -> (found: Bool, forward: Bool) {
     if distance == 0 {
       if i < firstBreak {
-        i = string.startIndex
+        i = characters.startIndex
         return (false, false)
       }
       if i >= lastBreak {
         i = lastBreak
         return (true, false)
       }
-      i = wholeCharacters._index(roundingDown: i)
+      i = characters.index(roundingDown: i)
       return (true, false)
     }
     if distance > 0 {
       if i >= lastBreak {
-        i = string.endIndex
+        i = characters.endIndex
         distance -= 1
         return (false, true)
       }
@@ -75,18 +79,18 @@ extension BigString._Chunk {
       }
       if
         distance <= characterCount,
-        let r = wholeCharacters.index(i, offsetBy: distance, limitedBy: string.endIndex)
+        let r = characters.index(i, offsetBy: distance, limitedBy: characters.endIndex)
       {
         i = r
         distance = 0
-        return (i < string.endIndex, true)
+        return (i < characters.endIndex, true)
       }
-      distance -= wholeCharacters.distance(from: i, to: lastBreak) + 1
-      i = string.endIndex
+      distance -= characters.distance(from: i, to: lastBreak) + 1
+      i = characters.endIndex
       return (false, true)
     }
     if i <= firstBreak {
-      i = string.startIndex
+      i = characters.startIndex
       if i == firstBreak { distance += 1 }
       return (false, false)
     }
@@ -97,14 +101,14 @@ extension BigString._Chunk {
     }
     if
       distance.magnitude <= characterCount,
-      let r = self.wholeCharacters.index(i, offsetBy: distance, limitedBy: firstBreak)
+      let r = characters.index(i, offsetBy: distance, limitedBy: firstBreak)
     {
       i = r
       distance = 0
       return (true, false)
     }
-    distance += self.wholeCharacters.distance(from: firstBreak, to: i)
-    i = string.startIndex
+    distance += characters.distance(from: firstBreak, to: i)
+    i = characters.startIndex
     return (false, false)
   }
 }

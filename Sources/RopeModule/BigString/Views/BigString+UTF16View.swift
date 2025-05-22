@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   public struct UTF16View: Sendable {
     var _base: BigString
@@ -32,7 +32,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View: Equatable {
   public static func ==(left: Self, right: Self) -> Bool {
     BigString.utf8IsEqual(left._base, to: right._base)
@@ -43,14 +43,14 @@ extension BigString.UTF16View: Equatable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View: Hashable {
   public func hash(into hasher: inout Hasher) {
     _base.hashUTF8(into: &hasher)
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View: Sequence {
   public typealias Element = UInt16
 
@@ -69,31 +69,32 @@ extension BigString.UTF16View: Sequence {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View.Iterator: IteratorProtocol {
   public typealias Element = UInt16
 
   public mutating func next() -> UInt16? {
-    guard _index < _base.endIndex else { return nil }
-    let ri = _index._rope!
-    var ci = _index._chunkIndex
-    let chunk = _base._rope[ri]
-    let result = chunk.string.utf16[ci]
-
-    chunk.string.utf16.formIndex(after: &ci)
-    if ci < chunk.string.endIndex {
-      _index = BigString.Index(baseUTF8Offset: _index._utf8BaseOffset, _rope: ri, chunk: ci)
-    } else {
-      _index = BigString.Index(
-        baseUTF8Offset: _index._utf8BaseOffset + chunk.utf8Count,
-        _rope: _base._rope.index(after: ri),
-        chunk: String.Index(_utf8Offset: 0))
-    }
-    return result
+//    guard _index < _base.endIndex else { return nil }
+//    let ri = _index._rope!
+//    var ci = _index._chunkIndex
+//    let chunk = _base._rope[ri]
+//    let result = chunk.string.utf16[ci]
+//
+//    chunk.string.utf16.formIndex(after: &ci)
+//    if ci < chunk.string.endIndex {
+//      _index = BigString.Index(baseUTF8Offset: _index._utf8BaseOffset, _rope: ri, chunk: ci)
+//    } else {
+//      _index = BigString.Index(
+//        baseUTF8Offset: _index._utf8BaseOffset + chunk.utf8Count,
+//        _rope: _base._rope.index(after: ri),
+//        chunk: String.Index(_utf8Offset: 0))
+//    }
+//    return result
+    fatalError("FIXME")
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View: BidirectionalCollection {
   public typealias Index = BigString.Index
   public typealias SubSequence = BigSubstring.UTF16View
@@ -138,7 +139,7 @@ extension BigString.UTF16View: BidirectionalCollection {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString.UTF16View {
   public func index(roundingDown i: Index) -> Index {
     _base._utf16Index(roundingDown: i)

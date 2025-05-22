@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   internal init(_from input: some StringProtocol) {
     var builder = _Rope.Builder()
@@ -86,7 +86,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension String {
   public init(_ big: BigString) {
     guard !big.isEmpty else {
@@ -94,44 +94,48 @@ extension String {
       return
     }
     if big._rope.isSingleton {
-      self = big._rope[big._rope.startIndex].string
+      let chunk = big._rope[big._rope.startIndex]
+      self.init(unsafeUninitializedCapacity: chunk.utf8Count) {
+        $0.initialize(fromContentsOf: chunk._bytes)
+      }
       return
     }
     self.init()
     self.reserveCapacity(big._utf8Count)
     for chunk in big._rope {
-      self.append(chunk.string)
+      self.unicodeScalars.append(contentsOf: chunk.unicodeScalars)
     }
   }
   
   internal init(_from big: BigString, in range: Range<BigString.Index>) {
-    self.init()
-
-    var start = big._unicodeScalarIndex(roundingDown: range.lowerBound)
-    start = big.resolve(start, preferEnd: false)
-
-    var end = big._unicodeScalarIndex(roundingDown: range.upperBound)
-    end = big.resolve(end, preferEnd: true)
-
-    let utf8Capacity = end.utf8Offset - start.utf8Offset
-    guard utf8Capacity > 0 else { return }
-
-    self.reserveCapacity(utf8Capacity)
-
-    let startRopeIndex = start._rope!
-    let endRopeIndex = end._rope!
-    if startRopeIndex == endRopeIndex {
-      self += big._rope[startRopeIndex].string[start._chunkIndex ..< end._chunkIndex]
-      return
-    }
-
-    self += big._rope[startRopeIndex].string[start._chunkIndex...]
-    var i = big._rope.index(after: startRopeIndex)
-    while i < endRopeIndex {
-      self += big._rope[i].string
-      big._rope.formIndex(after: &i)
-    }
-    self += big._rope[endRopeIndex].string[..<end._chunkIndex]
+//    self.init()
+//
+//    var start = big._unicodeScalarIndex(roundingDown: range.lowerBound)
+//    start = big.resolve(start, preferEnd: false)
+//
+//    var end = big._unicodeScalarIndex(roundingDown: range.upperBound)
+//    end = big.resolve(end, preferEnd: true)
+//
+//    let utf8Capacity = end.utf8Offset - start.utf8Offset
+//    guard utf8Capacity > 0 else { return }
+//
+//    self.reserveCapacity(utf8Capacity)
+//
+//    let startRopeIndex = start._rope!
+//    let endRopeIndex = end._rope!
+//    if startRopeIndex == endRopeIndex {
+//      self += big._rope[startRopeIndex].string[start._chunkIndex ..< end._chunkIndex]
+//      return
+//    }
+//
+//    self += big._rope[startRopeIndex].string[start._chunkIndex...]
+//    var i = big._rope.index(after: startRopeIndex)
+//    while i < endRopeIndex {
+//      self += big._rope[i].string
+//      big._rope.formIndex(after: &i)
+//    }
+//    self += big._rope[endRopeIndex].string[..<end._chunkIndex]
+    fatalError("FIXME")
   }
 
   public init(_ big: BigSubstring) {
