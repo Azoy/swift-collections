@@ -12,7 +12,7 @@
 #if swift(>=5.8)
 
 /// The core of a B-tree based String implementation.
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 public struct BigString: Sendable {
   typealias _Rope = Rope<_Chunk>
 

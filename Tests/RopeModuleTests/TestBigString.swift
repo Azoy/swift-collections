@@ -18,7 +18,7 @@ import _CollectionsTestSupport
 import _RopeModule
 #endif
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 class TestBigString: CollectionTestCase {
   override var isAvailable: Bool { isRunningOnSwiftStdlib5_8 }
 
@@ -106,7 +106,7 @@ class TestBigString: CollectionTestCase {
     let str = BigString(shortSample)
     checkBidirectionalCollection(str.unicodeScalars, expectedContents: shortSample.unicodeScalars)
   }
-
+  
   func testCharacterView() {
     let str = BigString(shortSample)
     checkBidirectionalCollection(str, expectedContents: shortSample)

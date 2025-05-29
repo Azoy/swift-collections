@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString._Chunk: CustomStringConvertible {
   var description: String {
     let counts = """
@@ -22,14 +22,7 @@ extension BigString._Chunk: CustomStringConvertible {
   }
 
   var _identity: String {
-#if arch(arm64) || arch(x86_64)
-    // Let's use the second word of the string representation as the identity; it contains
-    // the String's storage reference (if any).
-    let b = unsafeBitCast(self.string, to: (UInt64, UInt64).self)
-    return "@" + String(b.1, radix: 16)._rpad(to: 17)
-#else
-    return ""
-#endif
+    ObjectIdentifier(self).debugDescription
   }
 
   func _succinctContents(maxLength c: Int) -> String {
@@ -38,7 +31,7 @@ extension BigString._Chunk: CustomStringConvertible {
     let pc = String(prefixCount)._lpad(to: 3)
     let sc = String(suffixCount)
 
-    let s = String(wholeCharacters)
+    let s = String(characters)
     if s.isEmpty {
       return "\(pc)+...-\(sc)"
     }
@@ -46,7 +39,8 @@ extension BigString._Chunk: CustomStringConvertible {
     var state = _CharacterRecognizer(consuming: result)
 
     let i = result._appendQuotedProtectingLeft(s, with: &state, maxLength: c)
-    let j = s.index(s.endIndex, offsetBy: -c, limitedBy: string.startIndex) ?? string.startIndex
+    let limitedIndex = String.Index(_utf8Offset: startIndex.utf8Offset)
+    let j = s.index(s.endIndex, offsetBy: -c, limitedBy: limitedIndex) ?? limitedIndex
 
     if i < j {
       result._appendProtectingRight("...", with: &state)

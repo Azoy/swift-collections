@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   internal init(_from input: some StringProtocol) {
     var builder = _Rope.Builder()
@@ -86,21 +86,27 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension String {
   public init(_ big: BigString) {
     guard !big.isEmpty else {
       self.init()
       return
     }
-    if big._rope.isSingleton {
-      self = big._rope[big._rope.startIndex].string
-      return
-    }
-    self.init()
-    self.reserveCapacity(big._utf8Count)
-    for chunk in big._rope {
-      self.append(chunk.string)
+    
+    self.init(unsafeUninitializedCapacity: big._utf8Count) {
+      var start = 0
+      
+      for chunk in big._rope {
+        let end = start + chunk.utf8Count
+        let buffer = $0.extracting(start ..< end)
+        
+        _ = buffer.initialize(fromContentsOf: chunk._bytes)
+        
+        start = end
+      }
+      
+      return big._utf8Count
     }
   }
   
@@ -116,22 +122,32 @@ extension String {
     let utf8Capacity = end.utf8Offset - start.utf8Offset
     guard utf8Capacity > 0 else { return }
 
-    self.reserveCapacity(utf8Capacity)
+    self.init(unsafeUninitializedCapacity: utf8Capacity) {
+      let startRopeIndex = start._rope!
+      let endRopeIndex = end._rope!
+      
+      var dest = $0
+      
+      if startRopeIndex == endRopeIndex {
+        let src = big._rope[startRopeIndex]._bytes.extracting(start._chunkIndex.utf8Offset ..< end._chunkIndex.utf8Offset)
+        return dest.initialize(fromContentsOf: src)
+      }
+      
+      var src = big._rope[startRopeIndex]._bytes.extracting(start._chunkIndex.utf8Offset...)
+      var result = dest.initialize(fromContentsOf: src)
+      
+      var i = big._rope.index(after: startRopeIndex)
+      while i < endRopeIndex {
+        result += dest.initialize(fromContentsOf: big._rope[i]._bytes)
+        dest = dest.extracting(result...)
+        big._rope.formIndex(after: &i)
+      }
+      
+      src = big._rope[endRopeIndex]._bytes.extracting(..<end._chunkIndex.utf8Offset)
+      result += dest.initialize(fromContentsOf: src)
 
-    let startRopeIndex = start._rope!
-    let endRopeIndex = end._rope!
-    if startRopeIndex == endRopeIndex {
-      self += big._rope[startRopeIndex].string[start._chunkIndex ..< end._chunkIndex]
-      return
+      return result
     }
-
-    self += big._rope[startRopeIndex].string[start._chunkIndex...]
-    var i = big._rope.index(after: startRopeIndex)
-    while i < endRopeIndex {
-      self += big._rope[i].string
-      big._rope.formIndex(after: &i)
-    }
-    self += big._rope[endRopeIndex].string[..<end._chunkIndex]
   }
 
   public init(_ big: BigSubstring) {

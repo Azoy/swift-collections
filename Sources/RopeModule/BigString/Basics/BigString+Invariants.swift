@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 9999, *)
 extension BigString {
   public func _invariantCheck() {
 #if COLLECTIONS_INTERNAL_CHECKS
