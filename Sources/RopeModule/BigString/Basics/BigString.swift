@@ -12,10 +12,11 @@
 #if swift(>=5.8)
 
 /// The core of a B-tree based String implementation.
-@available(macOS 9999, *)
+@available(macOS 26, *)
 public struct BigString: Sendable {
   typealias _Rope = Rope<_Chunk>
 
+  nonisolated(unsafe)
   var _rope: _Rope
   
   internal init(_rope: _Rope) {

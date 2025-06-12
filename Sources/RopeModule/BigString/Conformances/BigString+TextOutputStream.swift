@@ -11,14 +11,14 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: TextOutputStream {
   public mutating func write(_ string: String) {
     append(contentsOf: string)
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: TextOutputStreamable {
   public func write(to target: inout some TextOutputStream) {
     for chunk in _rope {

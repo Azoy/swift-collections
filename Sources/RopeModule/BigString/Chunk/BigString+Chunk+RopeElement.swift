@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk: RopeElement {
   typealias Summary = BigString.Summary
 
@@ -24,8 +24,7 @@ extension BigString._Chunk: RopeElement {
   var isUndersized: Bool { utf8Count < Self.minUTF8Count }
 
   func invariantCheck() {
-#if COLLECTIONS_INTERNAL_CHECKS
-    precondition(string.endIndex._canBeUTF8)
+//#if COLLECTIONS_INTERNAL_CHECKS
     let c = utf8Count
     if c == 0 {
       precondition(counts == Counts(), "Non-empty counts")
@@ -34,9 +33,9 @@ extension BigString._Chunk: RopeElement {
     precondition(c <= Self.maxUTF8Count, "Oversized chunk")
     //precondition(utf8Count >= Self.minUTF8Count, "Undersized chunk")
 
-    precondition(counts.utf8 == string.utf8.count, "UTF-8 count mismatch")
-    precondition(counts.utf16 == string.utf16.count, "UTF-16 count mismatch")
-    precondition(counts.unicodeScalars == string.unicodeScalars.count, "Scalar count mismatch")
+    precondition(counts.utf8 == utf8Distance(from: startIndex, to: endIndex), "UTF-8 count mismatch")
+    precondition(counts.utf16 == utf16Distance(from: startIndex, to: endIndex), "UTF-16 count mismatch")
+    precondition(counts.unicodeScalars == scalarDistance(from: startIndex, to: endIndex), "Scalar count mismatch")
 
     precondition(counts.prefix <= c, "Invalid prefix count")
     precondition(counts.suffix <= c && counts.suffix > 0, "Invalid suffix count")
@@ -44,16 +43,15 @@ extension BigString._Chunk: RopeElement {
       let i = firstBreak
       let j = lastBreak
       precondition(i <= j, "Overlapping prefix and suffix")
-      let s = string[i...]
-      precondition(counts.characters == s.count, "Inconsistent character count")
-      precondition(j == s.index(before: s.endIndex), "Inconsistent suffix count")
+      precondition(counts.characters == characterDistance(from: i, to: endIndex), "Inconsistent character count")
+      precondition(j == characterIndex(before: endIndex, in: i..<endIndex), "Inconsistent suffix count")
     } else {
       // Anomalous case
       precondition(counts.prefix == c, "Inconsistent prefix count (continuation)")
       precondition(counts.suffix == c, "Inconsistent suffix count (continuation)")
       precondition(counts.characters == 0, "Inconsistent character count (continuation)")
     }
-#endif
+//#endif
   }
 
   func rebalance(nextNeighbor right: inout BigString._Chunk) -> Bool {
@@ -108,17 +106,17 @@ extension BigString._Chunk: RopeElement {
     fatalError("FIXME")
   }
 
-  func split(at i: BigString._Chunk.Index) -> Self {
-//    assert(i == unicodeScalars._index(roundingDown: i))
-//    let c = splitCounts(at: i)
-//    let new = Self(string[i...], c.right)
-//    self = Self(string[..<i], c.left)
-//    return new
-    fatalError("FIXME")
+  mutating func split(at i: BigString._Chunk.Index) -> Self {
+    ensureUnique()
+    assert(i == scalarIndex(roundingDown: i))
+    let c = splitCounts(at: i)
+    let new = Self(copying: utf8Span(from: i), c.right)
+    self = Self(copying: utf8Span(from: startIndex, to: i), c.left)
+    return new
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   static func _redistributeData(
     _ left: inout BigString._Chunk,

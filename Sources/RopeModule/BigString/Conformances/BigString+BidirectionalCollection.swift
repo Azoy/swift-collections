@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: BidirectionalCollection {
   public typealias SubSequence = BigSubstring
 
@@ -61,7 +61,7 @@ extension BigString: BidirectionalCollection {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   public func index(roundingDown i: Index) -> Index {
     _characterIndex(roundingDown: i)

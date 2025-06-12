@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: LosslessStringConvertible {
   // init?(_: String) is implemented by RangeReplaceableCollection.init(_:)
 }

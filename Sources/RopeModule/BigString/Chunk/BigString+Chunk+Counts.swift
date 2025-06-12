@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   struct Counts: Equatable {
     /// The number of UTF-8 code units within this chunk.
@@ -99,7 +99,7 @@ extension BigString._Chunk {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk.Counts {
   var characters: Int {
     get { Int(_characters) }
@@ -125,7 +125,7 @@ extension BigString._Chunk.Counts {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk.Counts {
   mutating func append(_ other: Self) {
     assert(hasSpaceToMerge(other))

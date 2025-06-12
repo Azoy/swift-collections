@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   public  struct Index: Sendable {
     typealias _Rope = BigString._Rope
@@ -40,7 +40,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index {
   @inline(__always)
   internal static func _bitsForUTF8Offset(_ utf8Offset: Int) -> UInt64 {
@@ -93,7 +93,7 @@ extension BigString.Index {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index {
   internal mutating func _clearUTF16TrailingSurrogate() {
     _flags = 0
@@ -148,28 +148,28 @@ extension BigString.Index {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index: Equatable {
   public static func ==(left: Self, right: Self) -> Bool {
     left._orderingValue == right._orderingValue
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index: Comparable {
   public static func <(left: Self, right: Self) -> Bool {
     left._orderingValue < right._orderingValue
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index: Hashable {
   public func hash(into hasher: inout Hasher) {
     hasher.combine(_orderingValue)
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Index: CustomStringConvertible {
   public var description: String {
     let utf16Offset = _chunkIndex.isUTF16TrailingSurrogate ? "+1" : ""
@@ -177,7 +177,7 @@ extension BigString.Index: CustomStringConvertible {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func resolve(_ i: Index, preferEnd: Bool) -> Index {
     if var ri = i._rope, _rope.isValid(ri) {

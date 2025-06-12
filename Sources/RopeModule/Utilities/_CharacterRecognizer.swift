@@ -11,15 +11,15 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 internal typealias _CharacterRecognizer = Unicode._CharacterRecognizer
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension _CharacterRecognizer {
   internal func _isKnownEqual(to other: Self) -> Bool {
     // FIXME: Enable when Swift 5.9 ships.
 //  #if swift(>=5.9)
-//    if #available(macOS 9999, iOS 9999, tvOS 9999, watchOS 9999, *) { // SwiftStdlib 5.9
+//    if #available(macOS 26, iOS 9999, tvOS 9999, watchOS 9999, *) { // SwiftStdlib 5.9
 //      return self == other
 //    }
 //  #endif
@@ -28,7 +28,7 @@ extension _CharacterRecognizer {
 }
 
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension _CharacterRecognizer {
   mutating func firstBreak(
     in str: Substring
@@ -57,30 +57,33 @@ extension _CharacterRecognizer {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension _CharacterRecognizer {
-  init(partialCharacter: BigString._Chunk.UnicodeScalarView) {
-    self.init(partialCharacter: partialCharacter[...])
+  init(partialCharacter: UTF8Span) {
+    self.init()
+    
+    guard !partialCharacter.isEmpty else {
+      return
+    }
+    
+    var iter = partialCharacter.makeUnicodeScalarIterator()
+    _ = hasBreak(before: iter.next().unsafelyUnwrapped)
+    
+    while let s = iter.next() {
+      let b = hasBreak(before: s)
+      assert(!b)
+    }
   }
 
-  init(partialCharacter: Slice<BigString._Chunk.UnicodeScalarView>) {
-    self.init()
-    var it = partialCharacter.makeIterator()
-    guard let first = it.next() else { return }
-    _ = hasBreak(before: first)
-    while let next = it.next() {
-      let b = hasBreak(before: next)
+  mutating func consumePartialCharacter(_ span: UTF8Span) {
+    var iter = span.makeUnicodeScalarIterator()
+    
+    while let s = iter.next() {
+      let b = hasBreak(before: s)
       assert(!b)
     }
   }
   
-  mutating func consumePartialCharacter(_ s: BigString._Chunk.UnicodeScalarView) {
-    for scalar in s {
-      let b = hasBreak(before: scalar)
-      assert(!b)
-    }
-  }
-
   mutating func consumeUntilFirstBreak(
     in s: Substring.UnicodeScalarView,
     from i: inout String.Index
@@ -127,6 +130,43 @@ extension _CharacterRecognizer {
     return (characters, first, last)
   }
   
+  mutating func consumeUntilFirstBreak(
+    _ c: BigString._Chunk,
+    in range: Range<BigString._Chunk.Index>,
+    from i: inout BigString._Chunk.Index
+  ) -> BigString._Chunk.Index? {
+    while i < range.upperBound {
+      defer {
+        i = c.scalarIndex(after: i)
+      }
+      if hasBreak(before: c[scalar: i]) {
+        return i
+      }
+    }
+    return nil
+  }
+  
+  mutating func consume(
+    _ chunk: BigString._Chunk,
+    _ range: Range<BigString._Chunk.Index>
+  ) -> (characters: Int, firstBreak: BigString._Chunk.Index, lastBreak: BigString._Chunk.Index)? {
+    var i = range.lowerBound
+    
+    guard let first = consumeUntilFirstBreak(chunk, in: range, from: &i) else {
+      return nil
+    }
+    
+    var characters = 1
+    var last = first
+    
+    while let next = consumeUntilFirstBreak(chunk, in: range, from: &i) {
+      characters += 1
+      last = next
+    }
+    
+    return (characters, first, last)
+  }
+  
   mutating func consume(
     _ chunk: BigString._Chunk, upTo index: String.Index
   ) -> (firstBreak: String.Index, prevBreak: String.Index)? {
@@ -143,17 +183,17 @@ extension _CharacterRecognizer {
     fatalError("FIXME")
   }
   
-  mutating func edgeCounts(
-    consuming s: String
-  ) -> (characters: Int, prefixCount: Int, suffixCount: Int) {
-    let c = s.utf8.count
-    guard let (chars, first, last) = consume(s[...]) else {
-      return (0, c, c)
-    }
-    let prefix = s._utf8Offset(of: first)
-    let suffix = c - s._utf8Offset(of: last)
-    return (chars, prefix, suffix)
-  }
+//  mutating func edgeCounts(
+//    consuming s: String
+//  ) -> (characters: Int, prefixCount: Int, suffixCount: Int) {
+//    let c = s.utf8.count
+//    guard let (chars, first, last) = consume(s[...]) else {
+//      return (0, c, c)
+//    }
+//    let prefix = s._utf8Offset(of: first)
+//    let suffix = c - s._utf8Offset(of: last)
+//    return (chars, prefix, suffix)
+//  }
 }
 
 #endif

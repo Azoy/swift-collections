@@ -11,46 +11,55 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   @inline(__always)
   var hasBreaks: Bool { counts.hasBreaks }
 
   var firstBreak: Index {
-    characters.startIndex
+    Index(utf8Offset: prefixCount).characterAligned
   }
 
   var lastBreak: Index {
-    characters.endIndex
+    Index(utf8Offset: utf8Count - suffixCount).characterAligned
   }
   
-  var prefix: Swift.Slice<UnicodeScalarView> { unicodeScalars[..<firstBreak] }
-  var suffix: Swift.Slice<UnicodeScalarView> { unicodeScalars[lastBreak...] }
+  var prefix: UTF8Span {
+    utf8Span(from: startIndex, to: firstBreak)
+  }
+  
+  var suffix: UTF8Span {
+    utf8Span(from: lastBreak)
+  }
+  
+  var wholeCharacters: UTF8Span {
+    utf8Span(from: firstBreak)
+  }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   var immediateLastBreakState: _CharacterRecognizer? {
     guard hasBreaks else { return nil }
-    return _CharacterRecognizer(partialCharacter: unicodeScalars[lastBreak...])
+    return _CharacterRecognizer(partialCharacter: suffix)
   }
 
   func nearestBreak(before index: Index) -> Index? {
-    let index = unicodeScalars.index(roundingDown: index)
+    let index = scalarIndex(roundingDown: index)
     let first = firstBreak
     guard index > first else { return nil }
     let last = lastBreak
     guard index <= last else { return last }
-    let rounded = characters.index(roundingDown: index)
+    let rounded = characterIndex(roundingDown: index)
     guard rounded == index else { return rounded }
-    return characters.index(before: rounded)
+    return characterIndex(before: rounded)
   }
 
   func immediateBreakState(
     upTo index: Index
   ) -> (prevBreak: Index, state: _CharacterRecognizer)? {
     guard let prev = nearestBreak(before: index) else { return nil }
-    let state = _CharacterRecognizer(partialCharacter: unicodeScalars[prev..<index])
+    let state = _CharacterRecognizer(partialCharacter: utf8Span(from: prev, to: index))
     return (prev, state)
   }
 }

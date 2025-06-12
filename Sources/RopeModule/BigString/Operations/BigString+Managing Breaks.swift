@@ -11,58 +11,59 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _breakState(
     upTo index: Index,
     nextScalarHint: Unicode.Scalar? = nil
   ) -> _CharacterRecognizer {
-//    assert(index == _unicodeScalarIndex(roundingDown: index))
-//    guard index > startIndex else {
-//      return _CharacterRecognizer()
-//    }
-//    let index = resolve(index, preferEnd: true)
-//    let ropeIndex = index._rope!
-//    let chunkIndex = index._chunkIndex
-//    let chunk = _rope[ropeIndex]
-//
-//    guard ropeIndex > _rope.startIndex || chunkIndex > chunk.unicodeScalars.startIndex else {
-//      return _CharacterRecognizer()
-//    }
-//
-//    if let next = nextScalarHint, chunkIndex > chunk.string.startIndex {
-//      let i = chunk.string.unicodeScalars.index(before: chunkIndex)
-//      let prev = chunk.string.unicodeScalars[i]
-//      if _CharacterRecognizer.quickBreak(between: prev, and: next) == true {
-//        return _CharacterRecognizer()
-//      }
-//    }
-//
-//    if let r = chunk.immediateBreakState(upTo: chunkIndex) {
-//      return r.state
-//    }
-//    // Find chunk that includes the start of the character.
-//    var ri = ropeIndex
-//    while ri > _rope.startIndex {
-//      _rope.formIndex(before: &ri)
-//      if _rope[ri].hasBreaks { break }
-//    }
-//    precondition(ri < ropeIndex)
-//
-//    // Collect grapheme breaking state.
-//    var state = _CharacterRecognizer(partialCharacter: _rope[ri].suffix)
-//    _rope.formIndex(after: &ri)
-//    while ri < ropeIndex {
-//      state.consumePartialCharacter(_rope[ri].string[...])
-//      _rope.formIndex(after: &ri)
-//    }
-//    state.consumePartialCharacter(chunk.string[..<chunkIndex])
-//    return state
-    fatalError("FIXME")
+    assert(index == _unicodeScalarIndex(roundingDown: index))
+    guard index > startIndex else {
+      return _CharacterRecognizer()
+    }
+    let index = resolve(index, preferEnd: true)
+    let ropeIndex = index._rope!
+    let chunkIndex = index._chunkIndex
+    let chunk = _rope[ropeIndex]
+
+    guard ropeIndex > _rope.startIndex || chunkIndex > chunk.startIndex else {
+      return _CharacterRecognizer()
+    }
+
+    if let next = nextScalarHint, chunkIndex > chunk.startIndex {
+      let i = chunk.scalarIndex(before: chunkIndex)
+      let prev = chunk[scalar: i]
+      if _CharacterRecognizer.quickBreak(between: prev, and: next) == true {
+        return _CharacterRecognizer()
+      }
+    }
+
+    if let r = chunk.immediateBreakState(upTo: chunkIndex) {
+      return r.state
+    }
+    // Find chunk that includes the start of the character.
+    var ri = ropeIndex
+    while ri > _rope.startIndex {
+      _rope.formIndex(before: &ri)
+      if _rope[ri].hasBreaks { break }
+    }
+    precondition(ri < ropeIndex)
+
+    // Collect grapheme breaking state.
+    let startOfCharChunk = _rope[ri]
+    var state = _CharacterRecognizer(partialCharacter: startOfCharChunk.suffix)
+    _rope.formIndex(after: &ri)
+    while ri < ropeIndex {
+      let nextChunk = _rope[ri]
+      state.consumePartialCharacter(nextChunk.utf8Span)
+      _rope.formIndex(after: &ri)
+    }
+    state.consumePartialCharacter(chunk.utf8Span(from: chunk.startIndex, to: chunkIndex))
+    return state
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   /// - Returns: the position at which the grapheme breaks finally sync up with the originals.
   ///  (or nil if they never did).
@@ -100,7 +101,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Rope {
   mutating func resyncBreaks(
     old: inout _CharacterRecognizer,
@@ -159,7 +160,7 @@ extension BigString._Rope {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   /// Resyncronize chunk metadata with the (possibly) reshuffled grapheme
   /// breaks after an insertion that ended at `index`.

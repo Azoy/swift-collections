@@ -11,58 +11,77 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
-  func append(_ other: __owned BigString._Chunk) {
-//    self._append(other.string[...], other.counts)
-    fatalError("FIXME")
+  mutating func append(_ other: consuming BigString._Chunk) {
+    _append(other.counts) {
+      _ = $0.initialize(fromContentsOf: other._bytes)
+    }
   }
 
-  func append(from ingester: inout BigString._Ingester) -> Self? {
-//    let desired = BigString._Ingester.desiredNextChunkSize(
-//      remaining: self.utf8Count + ingester.remainingUTF8)
-//    if desired == self.utf8Count {
-//      return nil
-//    }
-//    if desired > self.utf8Count {
-//      if let slice = ingester.nextSlice(maxUTF8Count: desired - self.utf8Count) {
-//        self._append(slice)
-//      }
-//      return nil
-//    }
-//
-//    // Split current chunk.
-//    let cut = string.unicodeScalars._index(roundingDown: string._utf8Index(at: desired))
-//    var new = self.split(at: cut)
-//    precondition(!self.isUndersized)
-//    let slice = ingester.nextSlice()!
-//    new._append(slice)
-//    precondition(ingester.isAtEnd)
-//    precondition(!new.isUndersized)
-//    return new
-    fatalError("FIXME")
+  mutating func append(from ingester: inout BigString._Ingester) -> Self? {
+    let desired = BigString._Ingester.desiredNextChunkSize(
+      remaining: self.utf8Count + ingester.remainingUTF8)
+    if desired == self.utf8Count {
+      return nil
+    }
+    if desired > self.utf8Count {
+      if let slice = ingester.nextSlice(maxUTF8Count: desired - self.utf8Count) {
+        self._append(slice)
+      }
+      return nil
+    }
+
+    // Split current chunk.
+    let cut = scalarIndex(roundingDown: Index(utf8Offset: desired))
+    var new = self.split(at: cut)
+    precondition(!self.isUndersized)
+    let slice = ingester.nextSlice()!
+    new._append(slice)
+    precondition(ingester.isAtEnd)
+    precondition(!new.isUndersized)
+    return new
   }
 
-  func _append(_ other: Slice) {
-//    let c = Counts(other)
-//    _append(other.string, c)
-    fatalError("FIXME")
+  mutating func _append(_ other: Slice) {
+    let c = Counts(other)
+    _append(other.string, c)
   }
 
-  func _append(_ str: __owned Substring, _ other: Counts) {
-//    self.counts.append(other)
-//    self.string += str
-//    invariantCheck()
-    fatalError("FIXME")
+  mutating func _append(_ str: consuming Substring, _ other: Counts) {
+    _append(other) {
+      _ = $0.initialize(from: str.utf8)
+    }
   }
 
+  mutating func _append(
+    _ newCounts: Counts,
+    _ body: (UnsafeMutableBufferPointer<UInt8>) -> ()
+  ) {
+    ensureUnique()
+    
+    let utf8Before = Int(counts.utf8)
+    counts.append(newCounts)
+    
+    storage.withUnsafeMutablePointerToElements {
+      let buffer = UnsafeMutableBufferPointer(
+        start: $0,
+        count: Self.maxUTF8Count
+      )
+      
+      body(buffer.extracting(utf8Before...))
+    }
+    
+    invariantCheck()
+  }
+  
   func _prepend(_ other: Slice) {
 //    let c = Counts(other)
 //    _prepend(other.string, c)
     fatalError("FIXME")
   }
 
-  func _prepend(_ str: __owned Substring, _ other: Counts) {
+  func _prepend(_ str: consuming Substring, _ other: Counts) {
 //    let c = self.counts
 //    self.counts = other
 //    self.counts.append(c)
@@ -72,7 +91,7 @@ extension BigString._Chunk {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   func _insert(
     _ slice: Slice,

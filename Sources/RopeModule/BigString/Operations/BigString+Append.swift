@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func _append(contentsOf other: __owned Substring) {
     if other.isEmpty { return }
@@ -41,11 +41,11 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   var _firstUnicodeScalar: Unicode.Scalar {
     assert(!isEmpty)
-    return _rope.root.firstItem.value.unicodeScalars.first!
+    return _rope.root.firstItem.value.firstScalar
   }
 
   mutating func _append(contentsOf other: __owned BigString) {
@@ -106,14 +106,14 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   var isUndersized: Bool {
     _utf8Count < _Chunk.minUTF8Count
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   /// Note: This assumes `other` already has the correct break positions.
   mutating func _append(_ other: __owned _Chunk) {

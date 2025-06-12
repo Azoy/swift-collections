@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: CustomDebugStringConvertible {
   public var debugDescription: String {
     description.debugDescription

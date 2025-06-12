@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   public func _dump(heightLimit: Int = .max) {
     _rope._dump(heightLimit: heightLimit)

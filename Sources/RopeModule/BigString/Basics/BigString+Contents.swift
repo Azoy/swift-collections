@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   /// The estimated maximum number of UTF-8 code units that `BigString` is guaranteed to be able
   /// to hold without encountering an overflow in its operations. This corresponds to the capacity
@@ -33,7 +33,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   var _characterCount: Int { _rope.summary.characters }
   var _unicodeScalarCount: Int { _rope.summary.unicodeScalars }
@@ -41,7 +41,7 @@ extension BigString {
   var _utf8Count: Int { _rope.summary.utf8 }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _distance(
     from start: Index,
@@ -53,7 +53,7 @@ extension BigString {
     assert(!isEmpty)
     let (lesser, greater) = (start <= end ? (start, end) : (end, start))
     let a = resolve(lesser, preferEnd: false)
-    let b = resolve(greater, preferEnd: true)
+    let b = resolve(greater, preferEnd: false)
     var d = 0
 
     let ropeIndexA = a._rope!
@@ -65,10 +65,13 @@ extension BigString {
       d = metric.distance(from: chunkIndexA, to: chunkIndexB, in: _rope[ropeIndexA])
     } else {
       let chunkA = _rope[ropeIndexA]
-      let chunkB = _rope[ropeIndexB]
       d += _rope.distance(from: ropeIndexA, to: ropeIndexB, in: metric)
       d -= metric.distance(from: chunkA.startIndex, to: chunkIndexA, in: chunkA)
-      d += metric.distance(from: chunkB.startIndex, to: chunkIndexB, in: chunkB)
+      
+      if ropeIndexB != _rope.endIndex {
+        let chunkB = _rope[ropeIndexB]
+        d += metric.distance(from: chunkB.startIndex, to: chunkIndexB, in: chunkB)
+      }
     }
     return start <= end ? d : -d
   }
@@ -90,7 +93,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   // FIXME: See if we need direct implementations for these.
 
@@ -111,7 +114,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   // FIXME: See if we need direct implementations for these.
 
@@ -132,7 +135,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _index(
     _ i: Index,
@@ -197,7 +200,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _index(
     _ i: Index,
@@ -243,7 +246,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _characterIndex(after i: Index) -> Index {
     _index(i, offsetBy: 1, in: _CharacterMetric())._knownCharacterAligned()
@@ -274,7 +277,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _characterIndex(before i: Index) -> Index {
     _index(i, offsetBy: -1, in: _CharacterMetric())._knownCharacterAligned()
@@ -308,7 +311,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _characterIndex(roundingDown i: Index) -> Index {
     let offset = i.utf8Offset
@@ -334,7 +337,7 @@ extension BigString {
         )._knownCharacterAligned()
       }
       if ci > first {
-        let j = chunk.characters.index(roundingDown: ci)
+        let j = chunk.characterIndex(roundingDown: ci)
         return Index(baseUTF8Offset: i._utf8BaseOffset, _rope: ri, chunk: j)._knownCharacterAligned()
       }
     }
@@ -360,7 +363,7 @@ extension BigString {
     guard !i._chunkIndex.isKnownScalarAligned else { return resolve(i, preferEnd: false) }
     let ri = start._rope!
     let chunk = self._rope[ri]
-    let ci = chunk.unicodeScalars.index(roundingDown: start._chunkIndex)
+    let ci = chunk.scalarIndex(roundingDown: start._chunkIndex)
     return Index(baseUTF8Offset: start._utf8BaseOffset, _rope: ri, chunk: ci)._knownScalarAligned()
   }
 
@@ -384,7 +387,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _characterIndex(roundingUp i: Index) -> Index {
     let j = _characterIndex(roundingDown: i)
@@ -415,50 +418,55 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _character(at start: Index) -> (character: Character, end: Index) {
-//    let start = _characterIndex(roundingDown: start)
-//    precondition(start.utf8Offset < _utf8Count, "Index out of bounds")
-//
-//    var ri = start._rope!
-//    var ci = start._chunkIndex
-//    var chunk = _rope[ri]
-//    
-////    if ci >= chunk.characters.endIndex {
-////      let endOffset = chunk.utf8Count - ci.utf8Offset
-////      
-////      if endOffset < chunk.utf8Count {
-////        let endStringIndex = chunk.utf8.index(chunk.utf8.startIndex, offsetBy: endOffset)
-////        let endIndex = Index(
-////          baseUTF8Offset: start._utf8BaseOffset, _rope: ri, chunk: endStringIndex
-////        )._knownCharacterAligned()
-////        
-////        var char: String = ""
-////        char.unicodeScalars.append(contentsOf: chunk.unicodeScalars[ci...])
-////        return (Character(char), endIndex)
-////      }
-////    }
-////    
-////    let char = chunk.characters[ci]
-//    var s = String(char)
-//    var base = start._utf8BaseOffset + chunk.utf8Count
-//    while true {
-//      _rope.formIndex(after: &ri)
-//      guard ri < _rope.endIndex else {
-//        ci = BigString._Chunk.Index(utf8Offset: 0)
-//        break
-//      }
-//      chunk = _rope[ri]
-//      s.unicodeScalars.append(contentsOf: chunk.prefix)
-//      if chunk.hasBreaks {
-//        ci = chunk.firstBreak
-//        break
-//      }
-//      base += chunk.utf8Count
-//    }
-//    return (Character(s), Index(baseUTF8Offset: base, _rope: ri, chunk: ci)._knownCharacterAligned())
-    fatalError("FIXME")
+    let start = _characterIndex(roundingDown: start)
+    precondition(start.utf8Offset < _utf8Count, "Index out of bounds")
+
+    var ri = start._rope!
+    var ci = start._chunkIndex
+    var chunk = _rope[ri]
+    
+    // Fast path: The entire character lives within the chunk
+    if (chunk.firstBreak...chunk.lastBreak).contains(ci) {
+      let endCi = chunk.characterIndex(after: ci)
+      let endIndex = Index(
+        baseUTF8Offset: endCi.utf8Offset,
+        _rope: ri,
+        chunk: endCi
+      )._knownCharacterAligned()
+      return (chunk[character: ci], endIndex)
+    }
+    
+    var s = ""
+    s.append(copying: chunk.suffix)
+
+    var base = start._utf8BaseOffset + chunk.utf8Count
+    while true {
+      _rope.formIndex(after: &ri)
+      guard ri < _rope.endIndex else {
+        ci = BigString._Chunk.Index(utf8Offset: 0)
+        break
+      }
+      chunk = _rope[ri]
+      
+      s.append(copying: chunk.prefix)
+      
+      if chunk.hasBreaks {
+        ci = chunk.firstBreak
+        break
+      }
+      base += chunk.utf8Count
+    }
+    return (
+      Character(s),
+      Index(
+        baseUTF8Offset: base,
+        _rope: ri,
+        chunk: ci
+      )._knownCharacterAligned()
+    )
   }
 
   subscript(_utf8 index: Index) -> UInt8 {
@@ -476,7 +484,7 @@ extension BigString {
   subscript(_utf16 index: Index) -> UInt16 {
     precondition(index < endIndex, "Index out of bounds")
     let index = resolve(index, preferEnd: false)
-    return _rope[index._rope!].utf16[index._chunkIndex]
+    return _rope[index._rope!][utf16: index._chunkIndex]
   }
 
   subscript(_utf16 offset: Int) -> UInt16 {
@@ -497,7 +505,7 @@ extension BigString {
   subscript(_unicodeScalar index: Index) -> Unicode.Scalar {
     precondition(index < endIndex, "Index out of bounds")
     let index = resolve(index, preferEnd: false)
-    return _rope[index._rope!].unicodeScalars[index._chunkIndex]
+    return _rope[index._rope!][scalar: index._chunkIndex]
   }
 
   subscript(_unicodeScalar offset: Int) -> Unicode.Scalar {
@@ -507,7 +515,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _foreachChunk(
     from start: Index,

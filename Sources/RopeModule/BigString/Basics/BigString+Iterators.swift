@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   struct ChunkIterator {
     var base: _Rope.Iterator
@@ -26,7 +26,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.ChunkIterator: IteratorProtocol {
   typealias Element = String
 

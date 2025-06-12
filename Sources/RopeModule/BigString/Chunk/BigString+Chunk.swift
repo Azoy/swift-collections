@@ -11,52 +11,60 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
-  internal final class _Chunk: ManagedBuffer<_Chunk.Counts, UInt8> {
+  internal struct _Chunk {
     typealias Slice = (string: Substring, characters: Int, prefix: Int, suffix: Int)
     
-    static func create() -> _Chunk {
-      let chunk = create(minimumCapacity: 0) { _ in
-        Counts()
-      }
-      
-      return unsafeDowncast(chunk, to: _Chunk.self)
+    var counts = Counts()
+    var storage: ManagedBuffer<(), UInt8>
+    
+    init() {
+      storage = .create(minimumCapacity: 0) { _ in }
     }
     
-    static func create(_ string: String, _ counts: Counts) -> _Chunk {
-      let mb = create(minimumCapacity: Int(counts.utf8)) {
+    init(_ counts: Counts, _ body: (UnsafeMutableBufferPointer<UInt8>) -> ()) {
+      self.counts = counts
+      
+      storage = .create(minimumCapacity: Self.maxUTF8Count) {
         $0.withUnsafeMutablePointerToElements {
           let buffer = UnsafeMutableBufferPointer(
             start: $0,
-            count: Int(counts.utf8)
+            count: Self.maxUTF8Count
           )
           
-          _ = buffer.initialize(from: string.utf8)
+          body(buffer)
         }
-        
-        return counts
       }
-
-      let chunk = unsafeDowncast(mb, to: _Chunk.self)
-      chunk.invariantCheck()
-      
-      return chunk
     }
-
-    static func create(_ string: Substring, _ counts: Counts) -> _Chunk {
-      create(String(string), counts)
+    
+    init(_ string: String, _ counts: Counts) {
+      self.init(counts) {
+        _ = $0.initialize(from: string.utf8)
+      }
     }
-
-    static func create(_ slice: Slice) -> _Chunk {
+    
+    init(_ string: Substring, _ counts: Counts) {
+      self.init(String(string), counts)
+    }
+    
+    init(copying span: UTF8Span, _ counts: Counts) {
+      self.init(counts) { buffer in
+        span.span.withUnsafeBufferPointer {
+          _ = buffer.initialize(fromContentsOf: $0)
+        }
+      }
+    }
+    
+    init(_ slice: _Chunk.Slice) {
       let string = String(slice.string)
       let counts = Counts((string[...], slice.characters, slice.prefix, slice.suffix))
-      return create(string, counts)
+      self.init(string, counts)
     }
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   var startIndex: Index {
     Index(utf8Offset: 0).scalarAligned
@@ -66,12 +74,8 @@ extension BigString._Chunk {
     Index(utf8Offset: Int(counts.utf8)).scalarAligned
   }
   
-  var counts: Counts {
-    header
-  }
-  
   var _bytes: UnsafeBufferPointer<UInt8> {
-    withUnsafeMutablePointerToElements {
+    storage.withUnsafeMutablePointerToElements {
       UnsafeBufferPointer(start: $0, count: Int(counts.utf8))
     }
   }
@@ -91,19 +95,19 @@ extension BigString._Chunk {
     }
   }
   
-//  @lifetime(borrow self)
-//  func utf8Span(from i: Int, to j: Int? = nil) -> UTF8Span {
-//    guard j == nil else {
-//      let span = span._extracting(i..<j!)
-//      return _overrideLifetime(UTF8Span(unchecked: span), borrowing: self)
-//    }
-//    
-//    let span = span._extracting(i...)
-//    return _overrideLifetime(UTF8Span(unchecked: span), borrowing: self)
-//  }
+  @lifetime(borrow self)
+  func utf8Span(from i: Index, to j: Index? = nil) -> UTF8Span {
+    guard j == nil else {
+      let span = span._extracting(i.utf8Offset..<j!.utf8Offset)
+      return _overrideLifetime(UTF8Span(unchecked: span), borrowing: self)
+    }
+    
+    let span = span._extracting(i.utf8Offset...)
+    return _overrideLifetime(UTF8Span(unchecked: span), borrowing: self)
+  }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   @inline(__always)
   static var maxUTF8Count: Int { 255 }
@@ -115,7 +119,24 @@ extension BigString._Chunk {
   static var maxSlicingError: Int { 3 }
 }
 
-//@available(macOS 9999, *)
+@available(macOS 26, *)
+extension BigString._Chunk {
+  func copy() -> Self {
+    Self(counts) {
+      _ = $0.initialize(fromContentsOf: _bytes)
+    }
+  }
+  
+  mutating func ensureUnique() {
+    if isKnownUniquelyReferenced(&storage) {
+      return
+    }
+    
+    self = copy()
+  }
+}
+
+//@available(macOS 26, *)
 //extension BigString._Chunk {
 //  @inline(__always)
 //  func take() -> Self {
@@ -132,7 +153,7 @@ extension BigString._Chunk {
 //  }
 //}
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   @inline(__always)
   var characterCount: Int { counts.characters }
@@ -152,16 +173,21 @@ extension BigString._Chunk {
   @inline(__always)
   var suffixCount: Int { counts.suffix }
   
-  var firstScalar: Unicode.Scalar { unicodeScalars.first! }
-  var lastScalar: Unicode.Scalar { unicodeScalars.last! }
+  var firstScalar: Unicode.Scalar {
+    self[scalar: startIndex]
+  }
+  
+  var lastScalar: Unicode.Scalar {
+    self[scalar: scalarIndex(before: endIndex)]
+  }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   var availableSpace: Int { Swift.max(0, Self.maxUTF8Count - utf8Count) }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk {
   func hasSpaceToMerge(_ other: some StringProtocol) -> Bool {
     utf8Count + other.utf8.count <= Self.maxUTF8Count

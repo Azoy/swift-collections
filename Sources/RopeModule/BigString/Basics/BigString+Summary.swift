@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   struct Summary {
     // FIXME: We only need 48 * 3 = 192 bits to represent a nonnegative value; pack these better
@@ -37,14 +37,14 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Summary: CustomStringConvertible {
   var description: String {
     "❨\(utf8)⋅\(utf16)⋅\(unicodeScalars)⋅\(characters)❩"
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.Summary: RopeSummary {
   @inline(__always)
   static var maxNodeSize: Int {

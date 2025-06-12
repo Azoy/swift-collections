@@ -107,6 +107,14 @@ class TestBigString: CollectionTestCase {
     checkBidirectionalCollection(str.unicodeScalars, expectedContents: shortSample.unicodeScalars)
   }
   
+  func testExampleDistance() {
+    let s = "cafe" + String(repeating: "\u{301}", count: 128)
+    let a = BigString(s)
+    a._dump()
+    
+    checkBidirectionalCollection(a, expectedContents: s)
+  }
+  
   func testCharacterView() {
     let str = BigString(shortSample)
     checkBidirectionalCollection(str, expectedContents: shortSample)
@@ -417,6 +425,10 @@ class TestBigString: CollectionTestCase {
         expectEqual(b, a)
       }
     }
+  }
+  
+  func testDumb() {
+    
   }
   
   func test_indices_scalar() {

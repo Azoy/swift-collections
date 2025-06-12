@@ -11,18 +11,18 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString._Chunk: CustomStringConvertible {
   var description: String {
     let counts = """
           ❨\(utf8Count)⋅\(utf16Count)⋅\(unicodeScalarCount)⋅\(characterCount)❩
           """._rpad(to: 17)
     let d = _succinctContents(maxLength: 10)
-    return "Chunk(\(_identity)\(counts) \(d))"
+    return "Chunk(\(_identity) \(counts) \(d))"
   }
 
   var _identity: String {
-    ObjectIdentifier(self).debugDescription
+    unsafeBitCast(storage, to: UnsafeRawPointer.self).debugDescription
   }
 
   func _succinctContents(maxLength c: Int) -> String {
@@ -30,8 +30,9 @@ extension BigString._Chunk: CustomStringConvertible {
     /// 0+"longer...string"-1
     let pc = String(prefixCount)._lpad(to: 3)
     let sc = String(suffixCount)
-
-    let s = String(characters)
+    
+    let s = String(copying: wholeCharacters)
+    
     if s.isEmpty {
       return "\(pc)+...-\(sc)"
     }

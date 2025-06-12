@@ -11,14 +11,14 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: Hashable {
   public func hash(into hasher: inout Hasher) {
     hashCharacters(into: &hasher)
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   internal func hashCharacters(into hasher: inout Hasher) {
     // FIXME: Implement properly normalized comparisons & hashing.

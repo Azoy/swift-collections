@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   internal init(_from input: some StringProtocol) {
     var builder = _Rope.Builder()
@@ -86,7 +86,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension String {
   public init(_ big: BigString) {
     guard !big.isEmpty else {
@@ -95,15 +95,11 @@ extension String {
     }
     
     self.init(unsafeUninitializedCapacity: big._utf8Count) {
-      var start = 0
+      var buffer = $0
       
       for chunk in big._rope {
-        let end = start + chunk.utf8Count
-        let buffer = $0.extracting(start ..< end)
-        
-        _ = buffer.initialize(fromContentsOf: chunk._bytes)
-        
-        start = end
+        let result = buffer.initialize(fromContentsOf: chunk._bytes)
+        buffer = buffer.extracting(result...)
       }
       
       return big._utf8Count
@@ -135,10 +131,11 @@ extension String {
       
       var src = big._rope[startRopeIndex]._bytes.extracting(start._chunkIndex.utf8Offset...)
       var result = dest.initialize(fromContentsOf: src)
+      dest = dest.extracting(result...)
       
       var i = big._rope.index(after: startRopeIndex)
       while i < endRopeIndex {
-        result += dest.initialize(fromContentsOf: big._rope[i]._bytes)
+        result = dest.initialize(fromContentsOf: big._rope[i]._bytes)
         dest = dest.extracting(result...)
         big._rope.formIndex(after: &i)
       }

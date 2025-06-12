@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 internal protocol _StringMetric: RopeMetric where Element == BigString._Chunk {
   func distance(
     from start: BigString._Chunk.Index,
@@ -26,7 +26,7 @@ internal protocol _StringMetric: RopeMetric where Element == BigString._Chunk {
   ) -> (found: Bool, forward: Bool)
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   internal struct _CharacterMetric: _StringMetric {
     typealias Element = BigString._Chunk
@@ -58,7 +58,7 @@ extension BigString {
       in chunk: BigString._Chunk
     ) -> BigString._Chunk.Index {
       precondition(offset < chunk.characterCount)
-      return chunk.characters.index(chunk.characters.startIndex, offsetBy: offset)
+      return chunk.characterIndex(chunk.firstBreak, offsetBy: offset)
     }
   }
   
@@ -73,7 +73,7 @@ extension BigString {
       to end: BigString._Chunk.Index,
       in chunk: BigString._Chunk
     ) -> Int {
-      chunk.unicodeScalars.distance(from: start, to: end)
+      chunk.scalarDistance(from: start, to: end)
     }
     
     func formIndex(
@@ -82,27 +82,27 @@ extension BigString {
       in chunk: BigString._Chunk
     ) -> (found: Bool, forward: Bool) {
       guard distance != 0 else {
-        i = chunk.unicodeScalars.index(roundingDown: i)
+        i = chunk.scalarIndex(roundingDown: i)
         return (true, false)
       }
       if distance > 0 {
-        let end = chunk.unicodeScalars.endIndex
+        let end = chunk.endIndex
         while distance > 0, i < end {
-          chunk.unicodeScalars.formIndex(after: &i)
+          i = chunk.scalarIndex(after: i)
           distance &-= 1
         }
         return (distance == 0, true)
       }
-      let start = chunk.unicodeScalars.startIndex
+      let start = chunk.startIndex
       while distance < 0, i > start {
-        chunk.unicodeScalars.formIndex(before: &i)
+        i = chunk.scalarIndex(before: i)
         distance &+= 1
       }
       return (distance == 0, false)
     }
     
     func index(at offset: Int, in chunk: BigString._Chunk) -> BigString._Chunk.Index {
-      chunk.unicodeScalars.index(chunk.unicodeScalars.startIndex, offsetBy: offset)
+      chunk.scalarIndex(chunk.startIndex, offsetBy: offset)
     }
   }
   
@@ -166,7 +166,7 @@ extension BigString {
       to end: BigString._Chunk.Index,
       in chunk: BigString._Chunk
     ) -> Int {
-      chunk.utf16.distance(from: start, to: end)
+      chunk.utf16Distance(from: start, to: end)
     }
     
     func formIndex(
@@ -177,34 +177,34 @@ extension BigString {
       if distance >= 0 {
         if
           distance <= chunk.utf16Count,
-          let r = chunk.utf16.index(
-            i, offsetBy: distance, limitedBy: chunk.utf16.endIndex
+          let r = chunk.utf16Index(
+            i, offsetBy: distance, limitedBy: chunk.endIndex
           ) {
           i = r
           distance = 0
           return (true, true)
         }
-        distance -= chunk.utf16.distance(from: i, to: chunk.utf16.endIndex)
-        i = chunk.utf16.endIndex
+        distance -= chunk.utf16Distance(from: i, to: chunk.endIndex)
+        i = chunk.endIndex
         return (false, true)
       }
       
       if
         distance.magnitude <= chunk.utf16Count,
-        let r = chunk.utf16.index(
-          i, offsetBy: distance, limitedBy: chunk.utf16.endIndex
+        let r = chunk.utf16Index(
+          i, offsetBy: distance, limitedBy: chunk.endIndex
         ) {
         i = r
         distance = 0
         return (true, true)
       }
-      distance += chunk.utf16.distance(from: chunk.utf16.startIndex, to: i)
-      i = chunk.utf16.startIndex
+      distance += chunk.utf16Distance(from: chunk.startIndex, to: i)
+      i = chunk.startIndex
       return (false, false)
     }
     
     func index(at offset: Int, in chunk: BigString._Chunk) -> BigString._Chunk.Index {
-      chunk.utf16.index(chunk.startIndex, offsetBy: offset)
+      chunk.utf16Index(chunk.startIndex, offsetBy: offset)
     }
   }
 }

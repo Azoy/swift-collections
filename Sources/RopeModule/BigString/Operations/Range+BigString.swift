@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension Range<BigString.Index> {
   internal var _isEmptyUTF8: Bool {
     lowerBound.utf8Offset == upperBound.utf8Offset

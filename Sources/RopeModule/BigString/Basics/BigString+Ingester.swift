@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   func _ingester(
     forInserting input: __owned Substring,
@@ -24,7 +24,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   internal struct _Ingester {
     typealias _Chunk = BigString._Chunk
@@ -118,7 +118,7 @@ extension BigString {
     
     mutating func nextChunk(maxUTF8Count: Int = _Chunk.maxUTF8Count) -> _Chunk? {
       guard let slice = nextSlice(maxUTF8Count: maxUTF8Count) else { return nil }
-      return _Chunk.create(slice)
+      return _Chunk(slice)
     }
     
     static func desiredNextChunkSize(remaining: Int) -> Int {
@@ -138,12 +138,12 @@ extension BigString {
     
     mutating func nextWellSizedChunk(suffix: Int = 0) -> _Chunk? {
       guard let slice = nextWellSizedSlice(suffix: suffix) else { return nil }
-      return _Chunk.create(slice)
+      return _Chunk(slice)
     }
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension String {
   func _nextSlice(
     after i: Index,

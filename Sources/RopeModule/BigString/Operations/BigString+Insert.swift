@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func _insert(
     contentsOf other: __owned Substring,
@@ -55,7 +55,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func _insert(contentsOf other: __owned Self, at index: Index) {
     guard index < endIndex else {
@@ -80,7 +80,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func _insert(contentsOf other: __owned Self, in range: Range<Index>, at index: Index) {
     guard index < endIndex else {

@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString {
   public struct UTF8View: Sendable {
     var _base: BigString
@@ -32,7 +32,7 @@ extension BigString {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View: Equatable {
   public static func ==(left: Self, right: Self) -> Bool {
     BigString.utf8IsEqual(left._base, to: right._base)
@@ -43,14 +43,14 @@ extension BigString.UTF8View: Equatable {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View: Hashable {
   public func hash(into hasher: inout Hasher) {
     _base.hashUTF8(into: &hasher)
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View: Sequence {
   public typealias Element = UInt8
 
@@ -69,7 +69,7 @@ extension BigString.UTF8View: Sequence {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View.Iterator: IteratorProtocol {
   public typealias Element = UInt8
 
@@ -129,7 +129,7 @@ extension BigString.UTF8View.Iterator: IteratorProtocol {
 
 
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View: BidirectionalCollection {
   public typealias Index = BigString.Index
   public typealias SubSequence = BigSubstring.UTF8View
@@ -174,7 +174,7 @@ extension BigString.UTF8View: BidirectionalCollection {
   }
 }
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString.UTF8View {
   public func index(roundingDown i: Index) -> Index {
     _base._utf8Index(roundingDown: i)

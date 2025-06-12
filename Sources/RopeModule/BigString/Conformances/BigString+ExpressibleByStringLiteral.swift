@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 9999, *)
+@available(macOS 26, *)
 extension BigString: ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self.init(value)
