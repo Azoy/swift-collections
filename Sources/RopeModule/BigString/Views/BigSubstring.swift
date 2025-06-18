@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 public struct BigSubstring: Sendable {
   var _base: BigString
   var _bounds: Range<Index>
@@ -34,47 +34,38 @@ public struct BigSubstring: Sendable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring {
   public var base: BigString { _base }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
-extension BigSubstring {
-  func _foreachChunk(
-    _ body: (Substring) -> Void
-  ) {
-    self._base._foreachChunk(from: _bounds.lowerBound, to: _bounds.upperBound, body)
-  }
-}
-
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: CustomStringConvertible {
   public var description: String {
     String(_from: _base, in: _bounds)
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: CustomDebugStringConvertible {
   public var debugDescription: String {
     description.debugDescription
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self.init(value)
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: LosslessStringConvertible {
   // init?(_: String) is implemented by RangeReplaceableCollection.init(_:)
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: Equatable {
   public static func ==(left: Self, right: Self) -> Bool {
     // FIXME: Implement properly normalized comparisons & hashing.
@@ -105,7 +96,7 @@ extension BigSubstring: Equatable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: Hashable {
   public func hash(into hasher: inout Hasher) {
     var it = self.makeIterator()
@@ -117,7 +108,7 @@ extension BigSubstring: Hashable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: Comparable {
   public static func < (left: Self, right: Self) -> Bool {
     // FIXME: Implement properly normalized comparisons & hashing.
@@ -142,7 +133,7 @@ extension BigSubstring: Comparable {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: Sequence {
   public typealias Element = Character
 
@@ -166,7 +157,7 @@ extension BigSubstring: Sequence {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: BidirectionalCollection {
   public typealias Index = BigString.Index
   public typealias SubSequence = Self
@@ -227,7 +218,7 @@ extension BigSubstring: BidirectionalCollection {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring {
   public func index(roundingDown i: Index) -> Index {
     precondition(i >= startIndex && i <= endIndex, "Index out of bounds")
@@ -240,7 +231,7 @@ extension BigSubstring {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring {
   /// Run the closure `body` to mutate the contents of this view within `range`, then update
   /// the bounds of this view to maintain an approximation of their logical position in the
@@ -275,7 +266,7 @@ extension BigSubstring {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigSubstring: RangeReplaceableCollection {
   public init() {
     let str = BigString()

@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func _removeSubrange(_ bounds: Range<Index>) {
     precondition(bounds.upperBound <= endIndex, "Index out of bounds")
@@ -22,7 +22,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigString {
   mutating func removeCharacter(at i: Index) -> Character {
     let start = self.resolve(i, preferEnd: false)
@@ -37,8 +37,8 @@ extension BigString {
     let ropeIndex = start._rope!
     let chunkIndex = start._chunkIndex
     let chunk = _rope[ropeIndex]
-    let scalar = chunk.string.unicodeScalars[chunkIndex]
-    let next = chunk.string.unicodeScalars.index(after: chunkIndex)
+    let scalar = chunk[scalar: chunkIndex]
+    let next = chunk.scalarIndex(after: chunkIndex)
     let end = Index(baseUTF8Offset: start._utf8BaseOffset, _rope: ropeIndex, chunk: next)
     self.removeSubrange(start ..< end)
     return scalar
