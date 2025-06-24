@@ -54,6 +54,8 @@ var defines: [String] = [
 
 var _settings: [SwiftSetting] = defines.map { .define($0) }
 
+_settings.append(.unsafeFlags(["-enable-experimental-feature", "LifetimeDependence"]))
+
 struct CustomTarget {
   enum Kind {
     case exported

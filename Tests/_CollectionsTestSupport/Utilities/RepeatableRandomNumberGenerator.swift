@@ -37,7 +37,12 @@ public struct RepeatableRandomNumberGenerator: RandomNumberGenerator {
     let global = UInt64(truncatingIfNeeded: Self.globalSeed)
     _state = seed ^ global ^ 0x536f52616e646f6d // "SoRandom"
   }
-
+  
+  public init(_seed: Int) {
+    let seed = UInt64(truncatingIfNeeded: _seed)
+    _state = 0 ^ seed ^ 0x536f52616e646f6d
+  }
+  
   private mutating func _next() -> UInt64 {
     _state = (Self._a &* _state &+ Self._c) & (Self._m - 1)
     return _state &>> 16

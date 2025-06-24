@@ -11,7 +11,7 @@
 
 #if swift(>=5.8)
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigString {
   func _ingester(
     forInserting input: __owned Substring,
@@ -24,7 +24,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigString {
   internal struct _Ingester {
     typealias _Chunk = BigString._Chunk
@@ -143,7 +143,7 @@ extension BigString {
   }
 }
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension String {
   func _nextSlice(
     after i: Index,
@@ -156,17 +156,6 @@ extension String {
     let end = self.utf8.index(i, offsetBy: maxUTF8Count, limitedBy: limit) ?? limit
     let j = self.unicodeScalars._index(roundingDown: end)
     return Range(uncheckedBounds: (i, j))
-  }
-}
-
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
-extension BigString._Chunk {
-  init(_ string: String) {
-    guard !string.isEmpty else { self.init(); return }
-    assert(string.utf8.count <= Self.maxUTF8Count)
-    var ingester = BigString._Ingester(string)
-    self = ingester.nextChunk()!
-    assert(ingester.isAtEnd)
   }
 }
 

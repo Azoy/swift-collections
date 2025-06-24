@@ -15,7 +15,7 @@
 import InternalCollectionsUtilities
 #endif
 
-@available(macOS 13.3, iOS 16.4, watchOS 9.4, tvOS 16.4, *)
+@available(macOS 26, *)
 extension BigString: RangeReplaceableCollection {
   public init() {
     self.init(_rope: _Rope())

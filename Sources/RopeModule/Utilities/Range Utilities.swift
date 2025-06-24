@@ -9,13 +9,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=5.8)
-
-@available(macOS 26, *)
-extension Range<BigString.Index> {
-  internal var _isEmptyUTF8: Bool {
-    lowerBound.utf8Offset == upperBound.utf8Offset
+extension FixedWidthInteger {
+  static var range: ClosedRange<Self> {
+    Self.min ... Self.max
   }
 }
 
-#endif
+extension ClosedRange where Bound: BinaryInteger {
+  @inline(__always)
+  func contains<Other: BinaryInteger>(_ other: Other) -> Bool {
+    other >= lowerBound && other <= upperBound
+  }
+}
