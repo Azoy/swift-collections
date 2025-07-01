@@ -526,6 +526,31 @@ extension BigString {
 @available(SwiftStdlib 6.2, *)
 extension BigString {
   func _foreachChunk(
+    _ body: (_Chunk) -> Void
+  ) {
+    let start = resolve(startIndex, preferEnd: false)
+    let end = resolve(endIndex, preferEnd: true)
+    
+    var ri = start._rope!
+    let endRopeIndex = end._rope!
+    
+    body(_rope[ri])
+    
+    if ri == endRopeIndex {
+      return
+    }
+    
+    _rope.formIndex(after: &ri)
+    
+    while ri < endRopeIndex {
+      body(_rope[ri])
+      _rope.formIndex(after: &ri)
+    }
+    
+    body(_rope[ri])
+  }
+  
+  func _foreachChunk(
     from start: Index,
     to end: Index,
     _ body: (UnsafeBufferPointer<UInt8>) -> Void

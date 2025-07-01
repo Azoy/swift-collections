@@ -33,6 +33,13 @@ class TestBigString: CollectionTestCase {
     super.setUp()
   }
 
+  func test_diff() {
+    let big = BigString(sampleString)
+    let other = BigString(big.dropLast(20))
+    
+    big.diff(with: other)
+  }
+  
   func test_capacity() {
     let min = BigString._minimumCapacity
     let max = BigString._maximumCapacity

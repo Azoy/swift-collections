@@ -58,7 +58,11 @@ extension Rope._Node {
         }
         assert(l.slot < u.slot)
         var left = c[l.slot]
-        left = left.split(at: metric.index(at: l.remaining, in: left.value))
+        
+        if l.remaining != 0 {
+          left = left.split(at: metric.index(at: l.remaining, in: left.value))
+        }
+        
         builder._insertBeforeTip(left)
         for i in l.slot + 1 ..< u.slot {
           builder._insertBeforeTip(c[i])

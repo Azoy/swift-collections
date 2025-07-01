@@ -104,8 +104,19 @@ extension BigString._Chunk: RopeElement {
   }
 
   mutating func split(at i: BigString._Chunk.Index) -> Self {
+    if i == endIndex {
+      return Self()
+    }
+    
     ensureUnique()
     assert(i == scalarIndex(roundingDown: i))
+    
+    if i == startIndex {
+      let new = self
+      self = Self()
+      return new
+    }
+    
     let c = splitCounts(at: i)
     let new = Self(copying: utf8Span(from: i), c.right)
     self = Self(copying: utf8Span(from: startIndex, to: i), c.left)
