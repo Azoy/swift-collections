@@ -175,18 +175,18 @@ extension UniqueArray where Element: ~Copyable {
   public var count: Int { _storage.count }
 }
 
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-@available(SwiftStdlib 5.0, *)
-extension UniqueArray: Container where Element: ~Copyable {
-  public typealias BorrowIterator = RigidArray<Element>.BorrowIterator
-  
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public func startBorrowIteration() -> Span<Element> {
-    self._storage.startBorrowIteration()
-  }
-}
-#endif
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+// @available(SwiftStdlib 5.0, *)
+// extension UniqueArray: Container where Element: ~Copyable {
+//   public typealias BorrowIterator = RigidArray<Element>.BorrowIterator
+
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public func startBorrowIteration() -> Span<Element> {
+//     self._storage.startBorrowIteration()
+//   }
+// }
+// #endif
 
 @available(SwiftStdlib 5.0, *)
 extension UniqueArray where Element: ~Copyable {

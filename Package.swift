@@ -30,9 +30,9 @@ let _traits: Set<Trait> = [
     description: """
       Enables source-unstable prototypes of `SortedSet` and `SortedDictionary`,
       two potential new collection types implementing in-memory B-trees.
-      These are early developer drafts, and they not ready for use in 
+      These are early developer drafts, and they not ready for use in
       production. We will make significant, source breaking API changes to these
-      types before they ship. 
+      types before they ship.
       """),
 ]
 #endif

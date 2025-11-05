@@ -284,18 +284,18 @@ extension RigidArray where Element: ~Copyable {
   public var count: Int { _count }
 }
 
-#if compiler(>=6.2) && COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-@available(SwiftStdlib 5.0, *)
-extension RigidArray: Container where Element: ~Copyable {
-  public typealias BorrowIterator = Span<Element>
+// #if compiler(>=6.2) && COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+// @available(SwiftStdlib 5.0, *)
+// extension RigidArray: Container where Element: ~Copyable {
+//   public typealias BorrowIterator = Span<Element>
 
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public func startBorrowIteration() -> Span<Element> {
-    self.span
-  }
-}
-#endif
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public func startBorrowIteration() -> Span<Element> {
+//     self.span
+//   }
+// }
+// #endif
 
 @available(SwiftStdlib 5.0, *)
 extension RigidArray where Element: ~Copyable {
@@ -554,7 +554,7 @@ extension RigidArray where Element: ~Copyable {
     return unsafe _storage.extracting(
       Range(uncheckedBounds: (index, index + count)))
   }
-  
+
   /// Perform a range replacement up to populating the newly opened gap. This
   /// deinitializes existing elements in the specified subrange, rearranges
   /// following elements to be at their final location, and sets the container's

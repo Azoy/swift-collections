@@ -109,7 +109,7 @@ extension RigidArray where Element: ~Copyable {
       }
     }
   }
-  
+
 #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
   /// Replaces the specified range of elements by moving the contents of an
   /// input span into their place. On return, the span is left empty.
@@ -380,26 +380,26 @@ extension RigidArray {
       unsafe self.replaceSubrange(subrange, copying: buffer)
     }
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  @inlinable
-  internal mutating func _replaceSubrange<
-    C: Container<Element> & ~Copyable & ~Escapable
-  >(
-    _ subrange: Range<Int>,
-    copyingContainer newElements: borrowing C,
-    newCount: Int
-  ) {
-    self.replaceSubrange(subrange, newCount: newCount) { target in
-      target.withUnsafeMutableBufferPointer { buffer, count in
-        count = newElements._copyContents(intoPrefixOf: buffer)
-        precondition(
-          count == newCount,
-          "Broken Container: count doesn't match contents")
-      }
-    }
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   @inlinable
+//   internal mutating func _replaceSubrange<
+//     C: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     _ subrange: Range<Int>,
+//     copyingContainer newElements: borrowing C,
+//     newCount: Int
+//   ) {
+//     self.replaceSubrange(subrange, newCount: newCount) { target in
+//       target.withUnsafeMutableBufferPointer { buffer, count in
+//         count = newElements._copyContents(intoPrefixOf: buffer)
+//         precondition(
+//           count == newCount,
+//           "Broken Container: count doesn't match contents")
+//       }
+//     }
+//   }
+// #endif
 
   @inlinable
   internal mutating func _replaceSubrange(
@@ -428,45 +428,45 @@ extension RigidArray {
 
   }
 
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Replaces the specified subrange of elements by copying the elements of
-  /// the given container.
-  ///
-  /// This method has the effect of removing the specified range of elements
-  /// from the array and inserting the new elements starting at the same
-  /// location. The number of new elements need not match the number of elements
-  /// being removed.
-  ///
-  /// If the capacity of the array isn't sufficient to accommodate the new
-  /// elements, then this method triggers a runtime error.
-  ///
-  /// If you pass a zero-length range as the `subrange` parameter, this method
-  /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
-  /// the `insert(copying:at:)` method instead is preferred in this case.
-  ///
-  /// Likewise, if you pass a zero-length container as the `newElements`
-  /// parameter, this method removes the elements in the given subrange
-  /// without replacement. Calling the `removeSubrange(_:)` method instead is
-  /// preferred in this case.
-  ///
-  /// - Parameters:
-  ///   - subrange: The subrange of the array to replace. The bounds of
-  ///     the range must be valid indices in the array.
-  ///   - newElements: The new elements to copy into the collection.
-  ///
-  /// - Complexity: O(`self.count` + `newElements.count`)
-  @inlinable
-  @inline(__always)
-  public mutating func replaceSubrange<
-    C: Container<Element> & ~Copyable & ~Escapable
-  >(
-    _ subrange: Range<Int>,
-    copying newElements: borrowing C
-  ) {
-    _replaceSubrange(
-      subrange, copyingContainer: newElements, newCount: newElements.count)
-  }
-#endif
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Replaces the specified subrange of elements by copying the elements of
+//   /// the given container.
+//   ///
+//   /// This method has the effect of removing the specified range of elements
+//   /// from the array and inserting the new elements starting at the same
+//   /// location. The number of new elements need not match the number of elements
+//   /// being removed.
+//   ///
+//   /// If the capacity of the array isn't sufficient to accommodate the new
+//   /// elements, then this method triggers a runtime error.
+//   ///
+//   /// If you pass a zero-length range as the `subrange` parameter, this method
+//   /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
+//   /// the `insert(copying:at:)` method instead is preferred in this case.
+//   ///
+//   /// Likewise, if you pass a zero-length container as the `newElements`
+//   /// parameter, this method removes the elements in the given subrange
+//   /// without replacement. Calling the `removeSubrange(_:)` method instead is
+//   /// preferred in this case.
+//   ///
+//   /// - Parameters:
+//   ///   - subrange: The subrange of the array to replace. The bounds of
+//   ///     the range must be valid indices in the array.
+//   ///   - newElements: The new elements to copy into the collection.
+//   ///
+//   /// - Complexity: O(`self.count` + `newElements.count`)
+//   @inlinable
+//   @inline(__always)
+//   public mutating func replaceSubrange<
+//     C: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     _ subrange: Range<Int>,
+//     copying newElements: borrowing C
+//   ) {
+//     _replaceSubrange(
+//       subrange, copyingContainer: newElements, newCount: newElements.count)
+//   }
+// #endif
 
   /// Replaces the specified subrange of elements by copying the elements of
   /// the given collection.
@@ -503,47 +503,47 @@ extension RigidArray {
     _replaceSubrange(
       subrange, copyingCollection: newElements, newCount: newElements.count)
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Replaces the specified subrange of elements by copying the elements of
-  /// the given container.
-  ///
-  /// This method has the effect of removing the specified range of elements
-  /// from the array and inserting the new elements starting at the same
-  /// location. The number of new elements need not match the number of elements
-  /// being removed.
-  ///
-  /// If the capacity of the array isn't sufficient to accommodate the new
-  /// elements, then this method triggers a runtime error.
-  ///
-  /// If you pass a zero-length range as the `subrange` parameter, this method
-  /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
-  /// the `insert(copying:at:)` method instead is preferred in this case.
-  ///
-  /// Likewise, if you pass a zero-length container as the `newElements`
-  /// parameter, this method removes the elements in the given subrange
-  /// without replacement. Calling the `removeSubrange(_:)` method instead is
-  /// preferred in this case.
-  ///
-  /// - Parameters:
-  ///   - subrange: The subrange of the array to replace. The bounds of
-  ///     the range must be valid indices in the array.
-  ///   - newElements: The new elements to copy into the collection.
-  ///
-  /// - Complexity: O(*n* + *m*), where *n* is count of this array and
-  ///   *m* is the count of `newElements`.
-  @inlinable
-  @inline(__always)
-  public mutating func replaceSubrange<
-    C: Container<Element> & Collection<Element>
-  >(
-    _ subrange: Range<Int>,
-    copying newElements: C
-  ) {
-    _replaceSubrange(
-      subrange, copyingContainer: newElements, newCount: newElements.count)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Replaces the specified subrange of elements by copying the elements of
+//   /// the given container.
+//   ///
+//   /// This method has the effect of removing the specified range of elements
+//   /// from the array and inserting the new elements starting at the same
+//   /// location. The number of new elements need not match the number of elements
+//   /// being removed.
+//   ///
+//   /// If the capacity of the array isn't sufficient to accommodate the new
+//   /// elements, then this method triggers a runtime error.
+//   ///
+//   /// If you pass a zero-length range as the `subrange` parameter, this method
+//   /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
+//   /// the `insert(copying:at:)` method instead is preferred in this case.
+//   ///
+//   /// Likewise, if you pass a zero-length container as the `newElements`
+//   /// parameter, this method removes the elements in the given subrange
+//   /// without replacement. Calling the `removeSubrange(_:)` method instead is
+//   /// preferred in this case.
+//   ///
+//   /// - Parameters:
+//   ///   - subrange: The subrange of the array to replace. The bounds of
+//   ///     the range must be valid indices in the array.
+//   ///   - newElements: The new elements to copy into the collection.
+//   ///
+//   /// - Complexity: O(*n* + *m*), where *n* is count of this array and
+//   ///   *m* is the count of `newElements`.
+//   @inlinable
+//   @inline(__always)
+//   public mutating func replaceSubrange<
+//     C: Container<Element> & Collection<Element>
+//   >(
+//     _ subrange: Range<Int>,
+//     copying newElements: C
+//   ) {
+//     _replaceSubrange(
+//       subrange, copyingContainer: newElements, newCount: newElements.count)
+//   }
+// #endif
 }
 
 #endif

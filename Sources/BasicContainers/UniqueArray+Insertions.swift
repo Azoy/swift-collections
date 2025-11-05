@@ -300,41 +300,41 @@ extension UniqueArray {
     _storage.insert(copying: newElements, at: index)
   }
 
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container into this array at the specified
-  /// position.
-  ///
-  /// The new elements are inserted before the element currently at the
-  /// specified index. If you pass the array’s `endIndex` as the `index`
-  /// parameter, then the new elements are appended to the end of the array.
-  ///
-  /// All existing elements at or following the specified position are moved to
-  /// make room for the new item.
-  ///
-  /// If the array does not have sufficient capacity to hold enough elements,
-  /// then this reallocates the array's storage to extend its capacity, using a
-  /// geometric growth rate.
-  ///
-  /// - Parameters
-  ///    - newElements: The new elements to insert into the array.
-  ///    - index: The position at which to insert the new elements. It must be
-  ///        a valid index of the array.
-  ///
-  /// - Complexity: O(*n* + *m*), where *n* is count of this array and
-  ///    *m* is the count of `newElements`.
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func insert<
-    C: Container<Element> & ~Copyable & ~Escapable
-  >(
-    copying newElements: borrowing C, at index: Int
-  ) {
-    // FIXME: Avoid moving the subsequent elements twice.
-    let c = newElements.count
-    _ensureFreeCapacity(c)
-    _storage._insertContainer(at: index, copying: newElements, newCount: c)
-  }
-#endif
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container into this array at the specified
+//   /// position.
+//   ///
+//   /// The new elements are inserted before the element currently at the
+//   /// specified index. If you pass the array’s `endIndex` as the `index`
+//   /// parameter, then the new elements are appended to the end of the array.
+//   ///
+//   /// All existing elements at or following the specified position are moved to
+//   /// make room for the new item.
+//   ///
+//   /// If the array does not have sufficient capacity to hold enough elements,
+//   /// then this reallocates the array's storage to extend its capacity, using a
+//   /// geometric growth rate.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: The new elements to insert into the array.
+//   ///    - index: The position at which to insert the new elements. It must be
+//   ///        a valid index of the array.
+//   ///
+//   /// - Complexity: O(*n* + *m*), where *n* is count of this array and
+//   ///    *m* is the count of `newElements`.
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func insert<
+//     C: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     copying newElements: borrowing C, at index: Int
+//   ) {
+//     // FIXME: Avoid moving the subsequent elements twice.
+//     let c = newElements.count
+//     _ensureFreeCapacity(c)
+//     _storage._insertContainer(at: index, copying: newElements, newCount: c)
+//   }
+// #endif
 
   /// Copies the elements of a collection into this array at the specified
   /// position.
@@ -366,42 +366,42 @@ extension UniqueArray {
     _storage._insertCollection(
       at: index, copying: newElements, newCount: newCount)
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container into this array at the specified
-  /// position.
-  ///
-  /// The new elements are inserted before the element currently at the
-  /// specified index. If you pass the array’s `endIndex` as the `index`
-  /// parameter, then the new elements are appended to the end of the array.
-  ///
-  /// All existing elements at or following the specified position are moved to
-  /// make room for the new item.
-  ///
-  /// If the array does not have sufficient capacity to hold enough elements,
-  /// then this reallocates the array's storage to extend its capacity, using a
-  /// geometric growth rate.
-  ///
-  /// - Parameters
-  ///    - newElements: The new elements to insert into the array.
-  ///    - index: The position at which to insert the new elements. It must be
-  ///        a valid index of the array.
-  ///
-  /// - Complexity: O(*n* + *m*), where *n* is count of this array and
-  ///    *m* is the count of `newElements`.
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func insert<
-    C: Container<Element> & Collection<Element>
-  >(
-    copying newElements: borrowing C, at index: Int
-  ) {
-    // FIXME: Avoid moving the subsequent elements twice.
-    let c = newElements.count
-    _ensureFreeCapacity(c)
-    _storage._insertContainer(at: index, copying: newElements, newCount: c)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container into this array at the specified
+//   /// position.
+//   ///
+//   /// The new elements are inserted before the element currently at the
+//   /// specified index. If you pass the array’s `endIndex` as the `index`
+//   /// parameter, then the new elements are appended to the end of the array.
+//   ///
+//   /// All existing elements at or following the specified position are moved to
+//   /// make room for the new item.
+//   ///
+//   /// If the array does not have sufficient capacity to hold enough elements,
+//   /// then this reallocates the array's storage to extend its capacity, using a
+//   /// geometric growth rate.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: The new elements to insert into the array.
+//   ///    - index: The position at which to insert the new elements. It must be
+//   ///        a valid index of the array.
+//   ///
+//   /// - Complexity: O(*n* + *m*), where *n* is count of this array and
+//   ///    *m* is the count of `newElements`.
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func insert<
+//     C: Container<Element> & Collection<Element>
+//   >(
+//     copying newElements: borrowing C, at index: Int
+//   ) {
+//     // FIXME: Avoid moving the subsequent elements twice.
+//     let c = newElements.count
+//     _ensureFreeCapacity(c)
+//     _storage._insertContainer(at: index, copying: newElements, newCount: c)
+//   }
+// #endif
 }
 
 #endif

@@ -83,7 +83,7 @@ extension UniqueArray where Element: ~Copyable {
     _ensureFreeCapacity(items.count)
     _storage.append(moving: items)
   }
-  
+
 #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
   /// Moves the elements of a input span to the end of this array, leaving the
   /// span empty.
@@ -169,6 +169,24 @@ extension UniqueArray where Element: ~Copyable {
     var items = items
     self.append(moving: &items)
   }
+
+  @available(SwiftStdlib 5.0, *)
+  @_alwaysEmitIntoClient
+  public mutating func append<Source: ConsumingSequence<Element>>(
+    consuming items: consuming Source
+  ) {
+    var finished = false
+
+    repeat {
+      edit {
+        finished = items.generate(into: &$0)
+      }
+
+      if !finished {
+
+      }
+    } while !finished
+  }
 #endif
 }
 
@@ -230,30 +248,30 @@ extension UniqueArray {
     _storage.append(copying: newElements)
   }
 
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container to the end of this array.
-  ///
-  /// If the array does not have sufficient capacity to hold enough elements,
-  /// then this reallocates the array's storage to extend its capacity, using
-  /// a geometric growth rate.
-  ///
-  /// - Parameters
-  ///    - newElements: A container whose contents to copy into the array.
-  ///
-  /// - Complexity: O(`newElements.count`), when amortized over many invocations
-  ///    over the same array.
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func append<
-    Source: Container<Element> & ~Copyable & ~Escapable
-  >(
-    copying newElements: borrowing Source
-  ) {
-    _ensureFreeCapacity(newElements.count)
-    _storage._append(copyingContainer: newElements)
-  }
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container to the end of this array.
+//   ///
+//   /// If the array does not have sufficient capacity to hold enough elements,
+//   /// then this reallocates the array's storage to extend its capacity, using
+//   /// a geometric growth rate.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: A container whose contents to copy into the array.
+//   ///
+//   /// - Complexity: O(`newElements.count`), when amortized over many invocations
+//   ///    over the same array.
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func append<
+//     Source: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     copying newElements: borrowing Source
+//   ) {
+//     _ensureFreeCapacity(newElements.count)
+//     _storage._append(copyingContainer: newElements)
+//   }
 
-#endif
+// #endif
 
   /// Copies the elements of a sequence to the end of this array.
   ///
@@ -284,28 +302,28 @@ extension UniqueArray {
       _storage.append(item)
     }
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container to the end of this array.
-  ///
-  /// If the array does not have sufficient capacity to hold enough elements,
-  /// then this reallocates the array's storage to extend its capacity, using a
-  /// geometric growth rate.
-  ///
-  /// - Parameters
-  ///    - newElements: A container whose contents to copy into the array.
-  ///
-  /// - Complexity: O(`newElements.count`), when amortized over many invocations
-  ///    over the same array.
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func append<
-    Source: Container<Element> & Sequence<Element>
-  >(copying newElements: Source) {
-    _ensureFreeCapacity(newElements.count)
-    _storage._append(copyingContainer: newElements)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container to the end of this array.
+//   ///
+//   /// If the array does not have sufficient capacity to hold enough elements,
+//   /// then this reallocates the array's storage to extend its capacity, using a
+//   /// geometric growth rate.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: A container whose contents to copy into the array.
+//   ///
+//   /// - Complexity: O(`newElements.count`), when amortized over many invocations
+//   ///    over the same array.
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func append<
+//     Source: Container<Element> & Sequence<Element>
+//   >(copying newElements: Source) {
+//     _ensureFreeCapacity(newElements.count)
+//     _storage._append(copyingContainer: newElements)
+//   }
+// #endif
 }
 
 #endif

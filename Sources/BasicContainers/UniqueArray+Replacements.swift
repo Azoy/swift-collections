@@ -376,51 +376,51 @@ extension UniqueArray {
     _ensureFreeCapacity(newElements.count)
     _storage.replaceSubrange(subrange, copying: newElements)
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Replaces the specified subrange of elements by copying the elements of
-  /// the given container.
-  ///
-  /// This method has the effect of removing the specified range of elements
-  /// from the array and inserting the new elements starting at the same location.
-  /// The number of new elements need not match the number of elements being
-  /// removed.
-  ///
-  /// If the capacity of the array isn't sufficient to perform the replacement,
-  /// then this reallocates the array's storage to extend its capacity, using a
-  /// geometric growth rate.
-  ///
-  /// If you pass a zero-length range as the `subrange` parameter, this method
-  /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
-  /// the `insert(copying:at:)` method instead is preferred in this case.
-  ///
-  /// Likewise, if you pass a zero-length container as the `newElements`
-  /// parameter, this method removes the elements in the given subrange
-  /// without replacement. Calling the `removeSubrange(_:)` method instead is
-  /// preferred in this case.
-  ///
-  /// - Parameters:
-  ///   - subrange: The subrange of the array to replace. The bounds of
-  ///     the range must be valid indices in the array.
-  ///   - newElements: The new elements to copy into the collection.
-  ///
-  /// - Complexity: O(*n* + *m*), where *n* is count of this array and
-  ///   *m* is the count of `newElements`.
-  @inlinable
-  @inline(__always)
-  public mutating func replaceSubrange<
-    C: Container<Element> & ~Copyable & ~Escapable
-  >(
-    _ subrange: Range<Int>,
-    copying newElements: borrowing C
-  ) {
-    // FIXME: Avoid moving the subsequent elements twice.
-    let c = newElements.count
-    _ensureFreeCapacity(c - subrange.count)
-    _storage._replaceSubrange(
-      subrange, copyingContainer: newElements, newCount: c)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Replaces the specified subrange of elements by copying the elements of
+//   /// the given container.
+//   ///
+//   /// This method has the effect of removing the specified range of elements
+//   /// from the array and inserting the new elements starting at the same location.
+//   /// The number of new elements need not match the number of elements being
+//   /// removed.
+//   ///
+//   /// If the capacity of the array isn't sufficient to perform the replacement,
+//   /// then this reallocates the array's storage to extend its capacity, using a
+//   /// geometric growth rate.
+//   ///
+//   /// If you pass a zero-length range as the `subrange` parameter, this method
+//   /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
+//   /// the `insert(copying:at:)` method instead is preferred in this case.
+//   ///
+//   /// Likewise, if you pass a zero-length container as the `newElements`
+//   /// parameter, this method removes the elements in the given subrange
+//   /// without replacement. Calling the `removeSubrange(_:)` method instead is
+//   /// preferred in this case.
+//   ///
+//   /// - Parameters:
+//   ///   - subrange: The subrange of the array to replace. The bounds of
+//   ///     the range must be valid indices in the array.
+//   ///   - newElements: The new elements to copy into the collection.
+//   ///
+//   /// - Complexity: O(*n* + *m*), where *n* is count of this array and
+//   ///   *m* is the count of `newElements`.
+//   @inlinable
+//   @inline(__always)
+//   public mutating func replaceSubrange<
+//     C: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     _ subrange: Range<Int>,
+//     copying newElements: borrowing C
+//   ) {
+//     // FIXME: Avoid moving the subsequent elements twice.
+//     let c = newElements.count
+//     _ensureFreeCapacity(c - subrange.count)
+//     _storage._replaceSubrange(
+//       subrange, copyingContainer: newElements, newCount: c)
+//   }
+// #endif
 
   /// Replaces the specified subrange of elements by copying the elements of
   /// the given collection.
@@ -462,50 +462,50 @@ extension UniqueArray {
     _storage._replaceSubrange(
       subrange, copyingCollection: newElements, newCount: c)
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Replaces the specified subrange of elements by copying the elements of
-  /// the given container.
-  ///
-  /// This method has the effect of removing the specified range of elements
-  /// from the array and inserting the new elements starting at the same location.
-  /// The number of new elements need not match the number of elements being
-  /// removed.
-  ///
-  /// If the capacity of the array isn't sufficient to perform the replacement,
-  /// then this reallocates the array's storage to extend its capacity, using a
-  /// geometric growth rate.
-  ///
-  /// If you pass a zero-length range as the `subrange` parameter, this method
-  /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
-  /// the `insert(copying:at:)` method instead is preferred in this case.
-  ///
-  /// Likewise, if you pass a zero-length container as the `newElements`
-  /// parameter, this method removes the elements in the given subrange
-  /// without replacement. Calling the `removeSubrange(_:)` method instead is
-  /// preferred in this case.
-  ///
-  /// - Parameters:
-  ///   - subrange: The subrange of the array to replace. The bounds of
-  ///     the range must be valid indices in the array.
-  ///   - newElements: The new elements to copy into the collection.
-  ///
-  /// - Complexity: O(*n* + *m*), where *n* is count of this array and
-  ///   *m* is the count of `newElements`.
-  @inlinable
-  @inline(__always)
-  public mutating func replaceSubrange<
-    C: Container<Element> & Collection<Element>
-  >(
-    _ subrange: Range<Int>,
-    copying newElements: borrowing C
-  ) {
-    // FIXME: Avoid moving the subsequent elements twice.
-    let c = newElements.count
-    _ensureFreeCapacity(c - subrange.count)
-    _storage._replaceSubrange(
-      subrange, copyingContainer: newElements, newCount: c)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Replaces the specified subrange of elements by copying the elements of
+//   /// the given container.
+//   ///
+//   /// This method has the effect of removing the specified range of elements
+//   /// from the array and inserting the new elements starting at the same location.
+//   /// The number of new elements need not match the number of elements being
+//   /// removed.
+//   ///
+//   /// If the capacity of the array isn't sufficient to perform the replacement,
+//   /// then this reallocates the array's storage to extend its capacity, using a
+//   /// geometric growth rate.
+//   ///
+//   /// If you pass a zero-length range as the `subrange` parameter, this method
+//   /// inserts the elements of `newElements` at `subrange.lowerBound`. Calling
+//   /// the `insert(copying:at:)` method instead is preferred in this case.
+//   ///
+//   /// Likewise, if you pass a zero-length container as the `newElements`
+//   /// parameter, this method removes the elements in the given subrange
+//   /// without replacement. Calling the `removeSubrange(_:)` method instead is
+//   /// preferred in this case.
+//   ///
+//   /// - Parameters:
+//   ///   - subrange: The subrange of the array to replace. The bounds of
+//   ///     the range must be valid indices in the array.
+//   ///   - newElements: The new elements to copy into the collection.
+//   ///
+//   /// - Complexity: O(*n* + *m*), where *n* is count of this array and
+//   ///   *m* is the count of `newElements`.
+//   @inlinable
+//   @inline(__always)
+//   public mutating func replaceSubrange<
+//     C: Container<Element> & Collection<Element>
+//   >(
+//     _ subrange: Range<Int>,
+//     copying newElements: borrowing C
+//   ) {
+//     // FIXME: Avoid moving the subsequent elements twice.
+//     let c = newElements.count
+//     _ensureFreeCapacity(c - subrange.count)
+//     _storage._replaceSubrange(
+//       subrange, copyingContainer: newElements, newCount: c)
+//   }
+// #endif
 }
 #endif

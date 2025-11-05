@@ -192,13 +192,24 @@ extension RigidArray where Element: ~Copyable {
   ///        the array.
   ///
   /// - Complexity: O(`items.count`)
+  // @_alwaysEmitIntoClient
+  // public mutating func append(
+  //   consuming items: consuming RigidArray<Element>
+  // ) {
+  //   // FIXME: Remove this in favor of a generic algorithm over consumable containers
+  //   var items = items
+  //   self.append(moving: &items)
+  // }
+
+  @available(SwiftStdlib 5.0, *)
   @_alwaysEmitIntoClient
-  public mutating func append(
-    consuming items: consuming RigidArray<Element>
+  public mutating func append<Source: ConsumingSequence<Element>>(
+    consuming items: consuming Source
   ) {
-    // FIXME: Remove this in favor of a generic algorithm over consumable containers
-    var items = items
-    self.append(moving: &items)
+    edit {
+      let finished = items.generate(into: &$0)
+      precondition(finished, "Didn't consume entire sequence")
+    }
   }
 #endif
 }
@@ -270,39 +281,39 @@ extension RigidArray {
     _count += c
     return it
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  @inlinable
-  internal mutating func _append<
-    Source: Container<Element> & ~Copyable & ~Escapable
-  >(
-    copyingContainer newElements: borrowing Source
-  ) {
-    let target = _freeSpace
-    _count += newElements._copyContents(intoPrefixOf: target)
-  }
-#endif
 
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container to the end of this array.
-  ///
-  /// If the array does not have sufficient capacity to hold all items in the
-  /// source iterable, then this triggers a runtime error.
-  ///
-  /// - Parameters
-  ///    - newElements: A container whose contents to copy into the array.
-  ///
-  /// - Complexity: O(`newElements.count`)
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func append<
-    Source: Container<Element> & ~Copyable & ~Escapable
-  >(
-    copying newElements: borrowing Source
-  ) {
-    _append(copyingContainer: newElements)
-  }
-#endif
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   @inlinable
+//   internal mutating func _append<
+//     Source: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     copyingContainer newElements: borrowing Source
+//   ) {
+//     let target = _freeSpace
+//     _count += newElements._copyContents(intoPrefixOf: target)
+//   }
+// #endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container to the end of this array.
+//   ///
+//   /// If the array does not have sufficient capacity to hold all items in the
+//   /// source iterable, then this triggers a runtime error.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: A container whose contents to copy into the array.
+//   ///
+//   /// - Complexity: O(`newElements.count`)
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func append<
+//     Source: Container<Element> & ~Copyable & ~Escapable
+//   >(
+//     copying newElements: borrowing Source
+//   ) {
+//     _append(copyingContainer: newElements)
+//   }
+// #endif
 
   /// Copies the elements of a sequence to the end of this array.
   ///
@@ -324,24 +335,24 @@ extension RigidArray {
     var it = self._append(prefixOf: newElements)
     precondition(it.next() == nil, "RigidArray capacity overflow")
   }
-  
-#if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
-  /// Copies the elements of a container to the end of this array.
-  ///
-  /// If the array does not have sufficient capacity to hold all items in the
-  /// source iterable, then this triggers a runtime error.
-  ///
-  /// - Parameters
-  ///    - newElements: The new elements to copy into the array.
-  ///
-  /// - Complexity: O(*m*), where *m* is the length of `newElements`.
-  @_alwaysEmitIntoClient
-  @inline(__always)
-  public mutating func append<
-    Source: Container<Element> & Sequence<Element>
-  >(copying newElements: Source) {
-    _append(copyingContainer: newElements)
-  }
-#endif
+
+// #if COLLECTIONS_UNSTABLE_CONTAINERS_PREVIEW
+//   /// Copies the elements of a container to the end of this array.
+//   ///
+//   /// If the array does not have sufficient capacity to hold all items in the
+//   /// source iterable, then this triggers a runtime error.
+//   ///
+//   /// - Parameters
+//   ///    - newElements: The new elements to copy into the array.
+//   ///
+//   /// - Complexity: O(*m*), where *m* is the length of `newElements`.
+//   @_alwaysEmitIntoClient
+//   @inline(__always)
+//   public mutating func append<
+//     Source: Container<Element> & Sequence<Element>
+//   >(copying newElements: Source) {
+//     _append(copyingContainer: newElements)
+//   }
+// #endif
 }
 #endif
