@@ -396,38 +396,6 @@ extension RigidArray where Element: ~Copyable {
   }
 }
 
-//MARK: - Copying helpers
-
-@available(SwiftStdlib 5.0, *)
-extension RigidArray {
-  /// Copy the contents of this array into a newly allocated rigid array
-  /// instance with just enough capacity to hold all its elements.
-  ///
-  /// - Complexity: O(`count`)
-  @_alwaysEmitIntoClient
-  public func clone() -> Self {
-    clone(capacity: self.count)
-  }
-
-  /// Copy the contents of this array into a newly allocated rigid array
-  /// instance with the specified capacity.
-  ///
-  /// - Parameter capacity: The desired capacity of the resulting rigid array.
-  ///    `capacity` must be greater than or equal to `count`.
-  ///
-  /// - Complexity: O(`count`)
-  @inlinable
-  public func clone(capacity: Int) -> Self {
-    precondition(capacity >= count, "RigidArray capacity overflow")
-    var result = RigidArray<Element>(capacity: capacity)
-    let initialized = unsafe result._storage.initialize(fromContentsOf: _items)
-    precondition(initialized == count)
-    result._count = count
-    return result
-  }
-}
-
-
 //MARK: - Opening and closing gaps
 
 @available(SwiftStdlib 5.0, *)
