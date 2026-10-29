@@ -117,6 +117,7 @@ let extraSettings: [SwiftSetting] = [
   .enableExperimentalFeature("AddressableTypes"),
   .enableExperimentalFeature("SuppressedAssociatedTypesWithDefaults"), // Requires Swift 6.4
   .enableExperimentalFeature("BorrowingSequence"), // 6.4
+  .enableExperimentalFeature("RawLayout")
   // Note: if you touch these, please make sure to also update the similar lists in
   // CMakeLists.txt and Xcode/Shared.xcconfig.
 ]

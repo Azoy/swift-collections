@@ -21,15 +21,11 @@ extension InlinedArray where Element: ~Copyable {
   public consuming func consumeForEach<E>(
     _ body: (consuming Element) throws(E) -> ()
   ) throws(E) {
-    for i in 0 ..< count {
-      var ms = _storage.mutableSpan
-      try ms.withUnsafeMutableBytes { (buffer: UnsafeMutableRawBufferPointer) throws(E) -> () in
-        let typedBuffer = buffer.assumingMemoryBound(to: Element.self)
-        
-        try body(typedBuffer.moveElement(from: i))
-      }
+    for i in indices {
+      try body(_items.moveElement(from: i))
     }
     
-    discard self
+    // Note: Because we don't 'discard self' here, technically the compiler will
+    //       run the destroy of '_storage', but that's fine since it's just a noop.
   }
 }

@@ -19,7 +19,10 @@ import InternalCollectionsUtilities
 extension SmallArray where Element: ~Copyable {
   @export(implementation)
   public mutating func append(_ newItem: consuming Element) {
-    switch self {
+    // FIXME: We have to spell out the switch for any appends because we don't
+    //        have `@once` closures yet.
+    let c = count
+    switch consume self {
     case .small(var s):
       guard s.isFull else {
         s._appendUnchecked(newItem)
@@ -27,17 +30,19 @@ extension SmallArray where Element: ~Copyable {
         return
       }
       
-      var u = UniqueArray<Element>(minimumCapacity: count + 1)
+      var u = UniqueArray<Element>(minimumCapacity: c + 1)
       
       s.consumeForEach {
         u.append($0)
       }
       
+      u.append(newItem)
+      
       self = .large(u)
       
-    case .large(var u):
-      u.append(newItem)
-      self = .large(u)
+    case .large(var l):
+      l.append(newItem)
+      self = .large(l)
     }
   }
 }

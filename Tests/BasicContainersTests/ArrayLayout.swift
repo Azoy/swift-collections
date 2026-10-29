@@ -91,6 +91,17 @@ extension UniqueArray where Element: ~Copyable {
   }
 }
 
+@available(SwiftStdlib 6.2, *)
+extension SmallArray where Element: ~Copyable {
+  init(using generator: (Int) -> Element) {
+    self.init(capacity: layout.capacity) { span in
+      for i in 0 ..< layout.count {
+        span.append(generator(i))
+      }
+    }
+  }
+}
+
 extension LifetimeTracker {
   func rigidArray<Element>(
     layout: ArrayLayout,
@@ -107,6 +118,13 @@ extension LifetimeTracker {
       self.instance(for: generator($0))
     }
     return UniqueArray(consuming: contents)
+  }
+  
+  @available(SwiftStdlib 6.2, *)
+  func smallArray<let capacity: Int, Element>(
+    using generator: (Int) -> Element = { $0 }
+  ) -> SmallArray<capacity, LifetimeTracked<Element>> {
+    SmallArray(layout: layout, using: { self.instance(for: generator($0)) })
   }
   
 #if UnstableContainersPreview

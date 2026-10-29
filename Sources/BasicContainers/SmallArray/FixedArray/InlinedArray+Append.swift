@@ -19,7 +19,8 @@ import InternalCollectionsUtilities
 extension InlinedArray where Element: ~Copyable {
   @export(implementation)
   internal mutating func _appendUnchecked(_ newItem: consuming Element) {
-    
+    _freeSpace.initializeElement(at: 0, to: newItem)
+    _count += 1
   }
   
   @export(implementation)
