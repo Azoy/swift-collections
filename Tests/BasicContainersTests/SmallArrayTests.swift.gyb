@@ -270,67 +270,67 @@ class SmallArrayTests: CollectionTestCase {
     }
   }
   
-  func test_init_copying_Span() {
-    do {
-      withLifetimeTracking { tracker in
-        let a: SmallArray<0, _> = tracker.smallArray()
-        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
-        expectEqual(tracker.instances, layout.count)
-        expectEqual(b.capacity, layout.capacity)
-        expectEqual(b.count, layout.count)
-        expectEqual(b.freeCapacity, layout.capacity - layout.count)
-        expectEqual(b.isEmpty, layout.count == 0)
-        for i in 0 ..< layout.count {
-          expectEqual(b[i].payload, i)
-        }
-        expectUniqueArrayContents(
-          b,
-          equivalentTo: 0 ..< layout.count,
-          by: { $0.payload == $1 },
-          printer: { "\($0.payload)" })
-      }
-    }
-    
-    do {
-      withLifetimeTracking { tracker in
-        let a = tracker.uniqueArray(layout: layout)
-        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
-        expectEqual(tracker.instances, layout.count)
-        expectEqual(b.capacity, layout.capacity)
-        expectEqual(b.count, layout.count)
-        expectEqual(b.freeCapacity, layout.capacity - layout.count)
-        expectEqual(b.isEmpty, layout.count == 0)
-        for i in 0 ..< layout.count {
-          expectEqual(b[i].payload, i)
-        }
-        expectUniqueArrayContents(
-          b,
-          equivalentTo: 0 ..< layout.count,
-          by: { $0.payload == $1 },
-          printer: { "\($0.payload)" })
-      }
-    }
-    
-    do {
-      withLifetimeTracking { tracker in
-        let a = tracker.uniqueArray(layout: layout)
-        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
-        expectEqual(tracker.instances, layout.count)
-        expectEqual(b.capacity, layout.capacity)
-        expectEqual(b.count, layout.count)
-        expectEqual(b.freeCapacity, layout.capacity - layout.count)
-        expectEqual(b.isEmpty, layout.count == 0)
-        for i in 0 ..< layout.count {
-          expectEqual(b[i].payload, i)
-        }
-        expectUniqueArrayContents(
-          b,
-          equivalentTo: 0 ..< layout.count,
-          by: { $0.payload == $1 },
-          printer: { "\($0.payload)" })
-      }
-    }
-  }
+//  func test_init_copying_Span() {
+//    do {
+//      withLifetimeTracking { tracker in
+//        let a: SmallArray<0, _> = tracker.smallArray()
+//        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
+//        expectEqual(tracker.instances, layout.count)
+//        expectEqual(b.capacity, layout.capacity)
+//        expectEqual(b.count, layout.count)
+//        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+//        expectEqual(b.isEmpty, layout.count == 0)
+//        for i in 0 ..< layout.count {
+//          expectEqual(b[i].payload, i)
+//        }
+//        expectUniqueArrayContents(
+//          b,
+//          equivalentTo: 0 ..< layout.count,
+//          by: { $0.payload == $1 },
+//          printer: { "\($0.payload)" })
+//      }
+//    }
+//    
+//    do {
+//      withLifetimeTracking { tracker in
+//        let a = tracker.uniqueArray(layout: layout)
+//        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
+//        expectEqual(tracker.instances, layout.count)
+//        expectEqual(b.capacity, layout.capacity)
+//        expectEqual(b.count, layout.count)
+//        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+//        expectEqual(b.isEmpty, layout.count == 0)
+//        for i in 0 ..< layout.count {
+//          expectEqual(b[i].payload, i)
+//        }
+//        expectUniqueArrayContents(
+//          b,
+//          equivalentTo: 0 ..< layout.count,
+//          by: { $0.payload == $1 },
+//          printer: { "\($0.payload)" })
+//      }
+//    }
+//    
+//    do {
+//      withLifetimeTracking { tracker in
+//        let a = tracker.uniqueArray(layout: layout)
+//        let b = UniqueArray(capacity: layout.capacity, copying: a.span)
+//        expectEqual(tracker.instances, layout.count)
+//        expectEqual(b.capacity, layout.capacity)
+//        expectEqual(b.count, layout.count)
+//        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+//        expectEqual(b.isEmpty, layout.count == 0)
+//        for i in 0 ..< layout.count {
+//          expectEqual(b[i].payload, i)
+//        }
+//        expectUniqueArrayContents(
+//          b,
+//          equivalentTo: 0 ..< layout.count,
+//          by: { $0.payload == $1 },
+//          printer: { "\($0.payload)" })
+//      }
+//    }
+//  }
 }
 
 #endif

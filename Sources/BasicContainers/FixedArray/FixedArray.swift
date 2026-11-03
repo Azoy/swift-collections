@@ -19,7 +19,7 @@ import InternalCollectionsUtilities
 
 @available(SwiftStdlib 6.2, *)
 @frozen
-public struct InlinedArray<let capacity: Int, Element: ~Copyable>: ~Copyable {
+public struct FixedArray<let capacity: Int, Element: ~Copyable>: ~Copyable {
   @usableFromInline
   internal var _count: Int
   
@@ -30,6 +30,7 @@ public struct InlinedArray<let capacity: Int, Element: ~Copyable>: ~Copyable {
   @export(implementation)
   @_transparent
   public init() {
+    precondition(capacity >= 0, "FixedArray must have a positive capacity")
     _count = 0
   }
   
@@ -37,17 +38,16 @@ public struct InlinedArray<let capacity: Int, Element: ~Copyable>: ~Copyable {
   // move init() { ... }
   
   @export(implementation)
-  @_transparent
   deinit {
     _items.deinitialize()
   }
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray: Sendable where Element: ~Copyable & Sendable {}
+extension FixedArray: Sendable where Element: ~Copyable & Sendable {}
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   @usableFromInline
   @_rawLayout(likeArrayOf: Element, count: capacity)
   internal struct _Storage: ~Copyable {
@@ -70,10 +70,10 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray._Storage: @unchecked Sendable where Element: ~Copyable & Sendable {}
+extension FixedArray._Storage: @unchecked Sendable where Element: ~Copyable & Sendable {}
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   @available(SwiftStdlib 6.2, *)
   @export(implementation)
   @_transparent
@@ -95,6 +95,7 @@ extension InlinedArray where Element: ~Copyable {
   @export(implementation)
   @_transparent
   public var capacity: Int {
+    // We max here because the static 'capacity' argument can be negative...
     _assumeNonNegative(capacity)
   }
 
@@ -124,7 +125,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// A span over the elements of this array, providing direct read-only access.
   ///
   /// - Complexity: O(1)
@@ -175,7 +176,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// Arbitrarily edit the storage underlying this array by invoking a
   /// user-supplied closure with a mutable `OutputSpan` view over it.
   ///
@@ -209,7 +210,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   @available(SwiftStdlib 6.2, *)
   @export(implementation)
   internal mutating func _closeGap(

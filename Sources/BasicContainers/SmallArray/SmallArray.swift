@@ -18,7 +18,7 @@ import InternalCollectionsUtilities
 @available(SwiftStdlib 6.2, *)
 @frozen
 public enum SmallArray<let capacity: Int, Element: ~Copyable>: ~Copyable {
-  case small(InlinedArray<capacity, Element>)
+  case small(FixedArray<capacity, Element>)
   case large(UniqueArray<Element>)
 }
 
@@ -29,7 +29,7 @@ extension SmallArray: Sendable where Element: Sendable {}
 extension SmallArray where Element: ~Copyable {
   @export(implementation)
   internal func _borrow<R: ~Copyable, E: Error>(
-    small: (borrowing InlinedArray<capacity, Element>) throws(E) -> R,
+    small: (borrowing FixedArray<capacity, Element>) throws(E) -> R,
     large: (borrowing UniqueArray<Element>) throws(E) -> R
   ) throws(E) -> R {
     switch self {
@@ -43,7 +43,7 @@ extension SmallArray where Element: ~Copyable {
   // Note: You cannot perform any resizing operations in the small case.
   @export(implementation)
   internal mutating func _mutate<R: ~Copyable, E: Error>(
-    small: (inout InlinedArray<capacity, Element>) throws(E) -> R,
+    small: (inout FixedArray<capacity, Element>) throws(E) -> R,
     large: (inout UniqueArray<Element>) throws(E) -> R
   ) throws(E) -> R {
     switch consume self {

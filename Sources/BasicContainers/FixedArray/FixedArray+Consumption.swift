@@ -16,7 +16,7 @@ import InternalCollectionsUtilities
 #endif
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   @export(implementation)
   public consuming func consumeForEach<E>(
     _ body: (consuming Element) throws(E) -> ()

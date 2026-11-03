@@ -16,22 +16,11 @@ import InternalCollectionsUtilities
 #endif
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: Copyable {
-  @available(SwiftStdlib 6.2, *)
-  @export(implementation)
-  public init(repeating repeatedValue: Element, count: Int = capacity) {
-    _storage.buffer.extracting(0 ..< count).initialize(repeating: repeatedValue)
-    _count = count
-  }
-}
-
-@available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// Creates a new array with the specified capacity, directly initializing
   /// its storage using an output span.
   ///
   /// - Parameters:
-  ///   - capacity: The storage capacity of the new array.
   ///   - body: A callback that gets called at most once to directly
   ///       populate newly reserved storage within the array. The function
   ///       is allowed to add fewer than `capacity` items. The array is
@@ -44,5 +33,27 @@ extension InlinedArray where Element: ~Copyable {
   ) throws(E) {
     self.init()
     try edit(body)
+  }
+}
+
+@available(SwiftStdlib 6.2, *)
+extension FixedArray where Element: Copyable {
+  /// Creates a new array containing the specified number of a single,
+  /// repeated value.
+  ///
+  /// - Parameters:
+  ///   - repeatedValue: The element to repeat.
+  ///   - count: The number of times to repeat the value passed in the
+  ///     `repeating` parameter. `count` must be zero or greater and less than
+  ///     or equal to `capacity`.
+  ///
+  /// - Complexity: O(`count`)
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public init(repeating repeatedValue: Element, count: Int = capacity) {
+    self.init()
+    let upper = Swift.min(count, capacity)
+    _storage.buffer.extracting(0 ..< upper).initialize(repeating: repeatedValue)
+    _count = upper
   }
 }

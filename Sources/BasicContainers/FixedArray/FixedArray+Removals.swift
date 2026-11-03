@@ -16,7 +16,7 @@ import InternalCollectionsUtilities
 #endif
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// Removes and returns the element at the specified position.
   ///
   /// All the elements following the specified position are moved to close the

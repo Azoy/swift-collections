@@ -18,7 +18,7 @@ import InternalCollectionsUtilities
 #if compiler(>=6.2)
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// A Boolean value indicating whether this array contains no elements.
   ///
   /// - Complexity: O(1)
@@ -38,7 +38,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// A type that represents a position in the array: an integer offset from the
   /// start.
   ///
@@ -101,7 +101,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   @export(implementation)
   @_transparent
   package func _ptr(to index: Int) -> UnsafePointer<Element> {
@@ -143,7 +143,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// Exchanges the values at the specified indices of the array.
   ///
   /// Both parameters must be valid indices of the array and not equal to
@@ -162,7 +162,7 @@ extension InlinedArray where Element: ~Copyable {
 }
 
 @available(SwiftStdlib 6.2, *)
-extension InlinedArray where Element: ~Copyable {
+extension FixedArray where Element: ~Copyable {
   /// Returns the position immediately after the given index.
   ///
   /// - Note: To improve performance, this method does not validate that the

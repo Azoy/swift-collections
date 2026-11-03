@@ -245,6 +245,10 @@ let targets: [CustomTarget] = [
     name: "BasicContainersTests",
     dependencies: [
         "BasicContainers", "_CollectionsTestSupport"
+    ],
+    exclude: [
+      "FixedArrayTests.swift.gyb",
+      "SmallArrayTests.swift.gyb"
     ]),
 
   .target(
