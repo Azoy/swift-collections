@@ -155,3 +155,107 @@ extension FixedArray where Element: ~Copyable {
     }
   }
 }
+
+@available(SwiftStdlib 6.2, *)
+extension FixedArray where Element: Copyable {
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  @unsafe
+  internal mutating func _appendUnchecked(
+    copying newElements: UnsafeBufferPointer<Element>
+  ) {
+    guard newElements.count > 0 else { return }
+    unsafe _freeSpace.baseAddress.unsafelyUnwrapped.initialize(
+      from: newElements.baseAddress.unsafelyUnwrapped, count: newElements.count)
+    _count &+= newElements.count
+  }
+
+  /// Copies the elements of a buffer to the end of this array.
+  ///
+  /// If the array does not have sufficient capacity to hold all items in the
+  /// buffer, then this triggers a runtime error.
+  ///
+  /// - Parameters:
+  ///    - newElements: A fully initialized buffer whose contents to copy into
+  ///       the array.
+  ///
+  /// - Complexity: O(`newElements.count`)
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public mutating func append(
+    copying newElements: UnsafeBufferPointer<Element>
+  ) {
+    precondition(
+      newElements.count <= freeCapacity,
+      "FixedArray capacity overflow")
+    unsafe _appendUnchecked(copying: newElements)
+  }
+
+  /// Copies the elements of a buffer to the end of this array.
+  ///
+  /// If the array does not have sufficient capacity to hold all items in the
+  /// buffer, then this triggers a runtime error.
+  ///
+  /// - Parameters:
+  ///    - items: A fully initialized buffer whose contents to copy into
+  ///        the array.
+  ///
+  /// - Complexity: O(`items.count`)
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public mutating func append(
+    copying items: UnsafeMutableBufferPointer<Element>
+  ) {
+    unsafe self.append(copying: UnsafeBufferPointer(items))
+  }
+
+  /// Copies the elements of a span to the end of this array.
+  ///
+  /// If the array does not have sufficient capacity to hold all items in the
+  /// span, then this triggers a runtime error.
+  ///
+  /// - Parameters:
+  ///    - items: A span whose contents to copy into the array.
+  ///
+  /// - Complexity: O(`items.count`)
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public mutating func append(copying items: Span<Element>) {
+    precondition(items.count <= freeCapacity, "FixedArray capacity overflow")
+    items.withUnsafeBufferPointer { source in
+      unsafe _appendUnchecked(copying: source)
+    }
+  }
+
+  @export(implementation)
+  @inline(__always)
+  internal mutating func _append<S: Sequence<Element>>(
+    prefixOf items: S
+  ) -> S.Iterator {
+    let (it, c) = unsafe items._copyContents(initializing: _freeSpace)
+    _count += c
+    return it
+  }
+
+  /// Copies the elements of a sequence to the end of this array.
+  ///
+  /// If the array does not have sufficient capacity to hold all items in the
+  /// sequence, then this triggers a runtime error.
+  ///
+  /// - Parameters:
+  ///    - newElements: The new elements to copy into the array.
+  ///
+  /// - Complexity: O(*m*), where *m* is the length of `newElements`.
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public mutating func append(copying newElements: some Sequence<Element>) {
+    let done: Void? = newElements.withContiguousStorageIfAvailable { buffer in
+      unsafe self.append(copying: buffer)
+      return
+    }
+    if done != nil { return }
+
+    var it = self._append(prefixOf: newElements)
+    precondition(it.next() == nil, "FixedArray capacity overflow")
+  }
+}

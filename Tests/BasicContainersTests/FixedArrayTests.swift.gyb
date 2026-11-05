@@ -157,6 +157,197 @@ class FixedArrayTests: CollectionTestCase {
     }
 % end
   }
+
+  func test_init_copying_Collection() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+% end
+  }
+
+  func test_init_copying_Span() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<${capacity}, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+% end
+  }
+
+  func test_span() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+% end
+  }
+
+  func test_mutableSpan() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        var a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+% end
+  }
+
+  func test_nextSpan() {
+    // FixedArray is expected to have exactly one span.
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+% end
+  }
+
+  func test_previousSpan() {
+    // FixedArray is expected to have exactly one span.
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+% end
+  }
+
+  func test_nextMutableSpan() {
+    // FixedArray is expected to have exactly one span.
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        var a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+% end
+  }
+
+  func test_index_properties() {
+% for (capacity, count) in layouts:
+    do {
+      let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+      let a = FixedArray<${capacity}, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+% end
+  }
+
+  func test_swapAt() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        var a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+% end
+  }
+
+  func test_subscript_borrow() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        let a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+% end
+  }
   
   func test_append() {
 % for (capacity, count) in layouts:
@@ -309,6 +500,106 @@ class FixedArrayTests: CollectionTestCase {
         }
       }
     }
+% end
+  }
+
+  func test_append_copying_MinimalSequence() {
+% for (capacity, count) in layouts:
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+          var a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+% end
+  }
+
+  func test_append_copying_Span() {
+% for (capacity, count) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: ${capacity}, count: ${count})
+        var a = FixedArray<${capacity}, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<${capacity - count}, _>(
+          layout: ArrayLayout(
+            capacity: ${capacity - count},
+            count: ${capacity - count}
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+% end
+  }
+
+  func test_equatable() {
+% for (capacityA, countA) in layouts:
+%   for (capacityB, countB) in layouts:
+%     if capacityA == capacityB:
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: ${capacityA}, count: ${countA})
+        let layoutB = ArrayLayout(capacity: ${capacityB}, count: ${countB})
+        let a = FixedArray<${capacityA}, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<${capacityB}, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+%     end
+%   end
+% end
+  }
+
+  func test_hashable() {
+% for (capacityA, countA) in layouts:
+%   for (capacityB, countB) in layouts:
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: ${capacityA}, count: ${countA})
+        let layoutB = ArrayLayout(capacity: ${capacityB}, count: ${countB})
+        let a = FixedArray<${capacityA}, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<${capacityB}, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+%   end
 % end
   }
 }

@@ -57,3 +57,52 @@ extension FixedArray where Element: Copyable {
     _count = upper
   }
 }
+
+@available(SwiftStdlib 6.2, *)
+extension FixedArray where Element: Copyable {
+  /// Creates a new array with the specified capacity, holding a copy
+  /// of the contents of a given sequence.
+  ///
+  /// - Parameters:
+  ///   - contents: The sequence whose contents to copy into the new array.
+  ///      The sequence must not contain more than `capacity` elements.
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public init(
+    capacity: Int,
+    copying contents: some Sequence<Element>
+  ) {
+    self.init()
+    self.append(copying: contents)
+  }
+
+  /// Creates a new array with the specified capacity, holding a copy
+  /// of the contents of a given collection.
+  ///
+  /// - Parameters:
+  ///   - contents: The collection whose contents to copy into the new array.
+  ///      The collection must not contain more than `capacity` elements.
+  @available(SwiftStdlib 6.2, *)
+  @export(implementation)
+  public init(
+    copying contents: some Collection<Element>
+  ) {
+    self.init()
+    self.append(copying: contents)
+  }
+
+  /// Creates a new array with the specified capacity, holding a copy
+  /// of the contents of the given span.
+  ///
+  /// - Parameters:
+  ///   - span: The span whose contents to copy into the new array.
+  ///      The span must not contain more than `capacity` elements.
+  @available(SwiftStdlib 6.2, *)
+  @_alwaysEmitIntoClient
+  public init(
+    copying span: Span<Element>
+  ) {
+    self.init()
+    self.append(copying: span)
+  }
+}

@@ -254,6 +254,1146 @@ class FixedArrayTests: CollectionTestCase {
       }
     }
   }
+
+  func test_init_copying_Collection() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(copying: (0 ..< layout.count).map { tracker.instance(for: $0) })
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(a.count, layout.count)
+        expectEqual(a.freeCapacity, layout.capacity - layout.count)
+        expectEqual(a.isEmpty, layout.count == 0)
+        expectEqual(a.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+  }
+
+  func test_init_copying_Span() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(copying: a.span)
+        expectEqual(tracker.instances, layout.count)
+        expectEqual(b.capacity, layout.capacity)
+        expectEqual(b.count, layout.count)
+        expectEqual(b.freeCapacity, layout.capacity - layout.count)
+        expectEqual(b.isEmpty, layout.count == 0)
+        expectEqual(b.isFull, layout.count == layout.capacity)
+        for i in 0 ..< layout.count {
+          expectEqual(b[i].payload, i)
+        }
+        expectFixedArrayContents(
+          b,
+          equivalentTo: 0 ..< layout.count,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+  }
+
+  func test_span() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let span = a.span
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< span.count {
+          expectEqual(span[i].payload, i)
+        }
+      }
+    }
+  }
+
+  func test_mutableSpan() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var span = a.mutableSpan
+        expectEqual(span.count, layout.count)
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, i)
+          span[i] = tracker.instance(for: -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(span[i].payload, -i)
+        }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, -i)
+        }
+      }
+    }
+  }
+
+  func test_nextSpan() {
+    // FixedArray is expected to have exactly one span.
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        print(a.count)
+        print(whole.testDescription)
+        print(first.testDescription)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = 0
+        let first = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(second.isEmpty)
+      }
+    }
+  }
+
+  func test_previousSpan() {
+    // FixedArray is expected to have exactly one span.
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let whole = a.span
+        var i = layout.count
+        let first = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(first.isIdentical(to: whole))
+        let second = a.span(before: &i)
+        expectEqual(i, 0)
+        expectTrue(second.isEmpty)
+      }
+    }
+  }
+
+  func test_nextMutableSpan() {
+    // FixedArray is expected to have exactly one span.
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        var i = 0
+        var span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectEqual(span.count, layout.count)
+        span = a.mutableSpan(after: &i)
+        expectEqual(i, layout.count)
+        expectTrue(span.isEmpty)
+      }
+    }
+  }
+
+  func test_index_properties() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      let a = FixedArray<0, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      let a = FixedArray<10, _>(layout: layout) { $0 }
+      expectEqual(a.startIndex, 0)
+      expectEqual(a.endIndex, layout.count)
+      expectEqual(a.indices, 0 ..< layout.count)
+    }
+  }
+
+  func test_swapAt() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count / 2) { i in
+          a.swapAt(i, layout.count - 1 - i)
+        }
+        let expected = (0 ..< layout.count).reversed()
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.count)
+      }
+    }
+  }
+
+  func test_subscript_borrow() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        for i in 0 ..< layout.count {
+          expectEqual(a[i].payload, i)
+        }
+      }
+    }
+  }
   
   func test_append() {
     do {
@@ -1261,6 +2401,2696 @@ class FixedArrayTests: CollectionTestCase {
             by: { $0.payload == $1 },
             printer: { "\($0.payload)" })
         }
+      }
+    }
+  }
+
+  func test_append_copying_MinimalSequence() {
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 0, count: 0)
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 0)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 1)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 2)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 5)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 8)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 9)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      withEvery("isContiguous", in: [false, true]) { isContiguous in
+        withLifetimeTracking { tracker in
+          let layout = ArrayLayout(capacity: 10, count: 10)
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.append(copying: MinimalSequence(
+            elements: (layout.count ..< layout.capacity).map { tracker.instance(for: $0) },
+            underestimatedCount: .half,
+            isContiguous: isContiguous))
+          expectTrue(a.isFull)
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+  }
+
+  func test_append_copying_Span() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(
+          layout: ArrayLayout(
+            capacity: 0,
+            count: 0
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(
+          layout: ArrayLayout(
+            capacity: 10,
+            count: 10
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<9, _>(
+          layout: ArrayLayout(
+            capacity: 9,
+            count: 9
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<8, _>(
+          layout: ArrayLayout(
+            capacity: 8,
+            count: 8
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<5, _>(
+          layout: ArrayLayout(
+            capacity: 5,
+            count: 5
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<2, _>(
+          layout: ArrayLayout(
+            capacity: 2,
+            count: 2
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<1, _>(
+          layout: ArrayLayout(
+            capacity: 1,
+            count: 1
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(
+          layout: ArrayLayout(
+            capacity: 0,
+            count: 0
+          )
+        ) { tracker.instance(for: layout.count + $0) }
+        a.append(copying: b.span)
+        expectTrue(a.isFull)
+        expectFixedArrayContents(
+          a,
+          equivalentTo: 0 ..< layout.capacity,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+        expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+  }
+
+  func test_equatable() {
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        expectTrue(a.isTriviallyIdentical(to: a))
+        expectFalse(a.isTriviallyIdentical(to: b))
+        expectEqual(a == b, layoutA.count == layoutB.count)
+      }
+    }
+  }
+
+  func test_hashable() {
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 0, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<0, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 0)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 1)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 2)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 5)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 8)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 9)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<0, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layoutA = ArrayLayout(capacity: 10, count: 10)
+        let layoutB = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layoutA) { tracker.instance(for: $0) }
+        let b = FixedArray<10, _>(layout: layoutB) { tracker.instance(for: $0) }
+        // FIXME: Use checkHashable when possible
+        var goodHash = false
+        for i in 0 ..< 10 {
+          var ha = Hasher()
+          ha.combine(i)
+          a.hash(into: &ha)
+          let hashValueA = ha.finalize()
+
+          var hb = Hasher()
+          hb.combine(i)
+          b.hash(into: &hb)
+          let hashValueB = hb.finalize()
+
+          if layoutA.count == layoutB.count {
+            expectEqual(hashValueA, hashValueB)
+            goodHash = true
+          } else if hashValueA != hashValueB {
+            goodHash = true
+          }
+        }
+        expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
       }
     }
   }
