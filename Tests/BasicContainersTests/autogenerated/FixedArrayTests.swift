@@ -791,29 +791,12 @@ class FixedArrayTests: CollectionTestCase {
     // FixedArray is expected to have exactly one span.
     do {
       withLifetimeTracking { tracker in
-        let layout = ArrayLayout(capacity: 0, count: 0)
-        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
-        var i = 0
-        let first = a.span(after: &i)
-        print(a.count)
-        print(whole.testDescription)
-        print(first.testDescription)
-        expectEqual(i, layout.count)
-        expectTrue(first.isIdentical(to: whole))
-        let second = a.span(after: &i)
-        expectEqual(i, layout.count)
-        expectTrue(second.isEmpty)
-      }
-    }
-    do {
-      withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 0)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -824,10 +807,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 1)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -838,10 +821,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 2)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -852,10 +835,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 5)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -866,10 +849,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 8)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -880,10 +863,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 9)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -894,10 +877,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 10)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = 0
         let first = a.span(after: &i)
         expectEqual(i, layout.count)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(after: &i)
         expectEqual(i, layout.count)
@@ -910,26 +893,12 @@ class FixedArrayTests: CollectionTestCase {
     // FixedArray is expected to have exactly one span.
     do {
       withLifetimeTracking { tracker in
-        let layout = ArrayLayout(capacity: 0, count: 0)
-        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
-        var i = layout.count
-        let first = a.span(before: &i)
-        expectEqual(i, 0)
-        expectTrue(first.isIdentical(to: whole))
-        let second = a.span(before: &i)
-        expectEqual(i, 0)
-        expectTrue(second.isEmpty)
-      }
-    }
-    do {
-      withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 0)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -940,10 +909,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 1)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -954,10 +923,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 2)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -968,10 +937,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 5)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -982,10 +951,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 8)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -996,10 +965,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 9)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -1010,10 +979,10 @@ class FixedArrayTests: CollectionTestCase {
       withLifetimeTracking { tracker in
         let layout = ArrayLayout(capacity: 10, count: 10)
         let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
-        let whole = a.span
         var i = layout.count
         let first = a.span(before: &i)
         expectEqual(i, 0)
+        let whole = a.span
         expectTrue(first.isIdentical(to: whole))
         let second = a.span(before: &i)
         expectEqual(i, 0)
@@ -2679,6 +2648,3225 @@ class FixedArrayTests: CollectionTestCase {
           by: { $0.payload == $1 },
           printer: { "\($0.payload)" })
         expectEqual(tracker.instances, layout.capacity)
+      }
+    }
+  }
+
+  func test_insert_at() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      guard layout.count < layout.capacity else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.insert(-1, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.insert(tracker.instance(for: -1), at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.count + 1)
+        }
+      }
+    }
+  }
+
+  func test_insert_addingCount_full() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.insert(addingCount: c, at: i) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + c,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+  }
+
+  func test_insert_addingCount_partial() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      guard !layout.isFull else { return }
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.insert(addingCount: c, at: i) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.insert(
+                contentsOf: layout.count ..< layout.count + n,
+                at: i)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+  }
+
+  func test_insert_moving_UnsafeMutableBufferPointer() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("c", in: 0 ..< layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            let additions = UnsafeMutableBufferPointer<LifetimeTracked<Int>>
+              .allocate(capacity: c)
+            for i in 0 ..< c {
+              additions.initializeElement(
+                at: i,
+                to: tracker.instance(for: layout.count + i))
+            }
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(moving: additions, at: i)
+
+            additions.deallocate()
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: layout.count ..< layout.count + c, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+  }
+
+  func test_insert_moving_OutputSpan() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withSomeArrayLayouts("spanLayout", ofCapacities: 0 ..< layout.freeCapacity) { spanLayout in
+        withEvery("i", in: 0 ... layout.count) { i in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            tracker.withOutputSpan(
+              layout: spanLayout,
+              using: { layout.count + $0 }
+            ) { span in
+              a.insert(moving: &span, at: i)
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(
+              contentsOf: layout.count ..< layout.count + spanLayout.count,
+              at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+  }
+
+  func test_insert_copying_Collection() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withLifetimeTracking { tracker in
+            let addition = (layout.count ..< layout.capacity)
+
+            var expected = Array(0 ..< layout.count)
+            expected.insert(contentsOf: addition, at: i)
+
+            let trackedAddition = MinimalCollection(
+              addition.map { tracker.instance(for: $0) },
+              isContiguous: isContiguous)
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            a.insert(copying: trackedAddition, at: i)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.capacity)
+          }
+        }
+      }
+    }
+  }
+
+  func test_insert_copying_Span() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<0, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<10, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<9, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<8, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<5, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<2, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<1, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("i", in: 0 ... layout.count) { i in
+        withLifetimeTracking { tracker in
+          let addition = Array(layout.count ..< layout.capacity)
+
+          var expected = Array(0 ..< layout.count)
+          expected.insert(contentsOf: addition, at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let fixedAddition = FixedArray<0, _> { span in
+            for i in 0 ..< addition.count {
+              span.append(tracker.instance(for: addition[i]))
+            }
+          }
+          a.insert(copying: fixedAddition.span, at: i)
+
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+          expectEqual(tracker.instances, layout.capacity)
+        }
+      }
+    }
+  }
+
+  func test_removeAll() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        a.removeAll()
+        expectTrue(a.isEmpty)
+        expectEqual(a.capacity, layout.capacity)
+        expectEqual(tracker.instances, 0)
+      }
+    }
+  }
+
+  func test_removeLast() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withLifetimeTracking { tracker in
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        withEvery("i", in: 0 ..< layout.count) { i in
+          let old = a.removeLast()
+          expectEqual(old.payload, layout.count - 1 - i)
+          expectEqual(a.count, layout.count - 1 - i)
+          expectEqual(a.capacity, layout.capacity)
+        }
+        expectEqual(tracker.instances, 0)
+      }
+    }
+  }
+
+  func test_removeLast_k() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("k", in: 0 ..< layout.count) { k in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeLast(k)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          expectEqual(tracker.instances, layout.count)
+          a.removeLast(k)
+          expectEqual(tracker.instances, layout.count - k)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+  }
+
+  func test_remove_at() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEvery("i", in: 0 ..< layout.count) { i in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.remove(at: i)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          let old = a.remove(at: i)
+          expectEqual(old.payload, i)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+  }
+
+  func test_removeSubrange() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withLifetimeTracking { tracker in
+          var expected = Array(0 ..< layout.count)
+          expected.removeSubrange(range)
+
+          var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+          a.removeSubrange(range)
+          expectFixedArrayContents(
+            a,
+            equivalentTo: expected,
+            by: { $0.payload == $1 },
+            printer: { "\($0.payload)" })
+        }
+      }
+    }
+  }
+
+  func test_popLast() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withLifetimeTracking { tracker in
+        var expected = Array(0 ..< layout.count)
+        let expectedItem = expected.popLast()
+
+        var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        let item = a.popLast()
+
+        expectEquivalent(item, expectedItem, by: { $0?.payload == $1 })
+        expectFixedArrayContents(
+          a,
+          equivalentTo: expected,
+          by: { $0.payload == $1 },
+          printer: { "\($0.payload)" })
+      }
+    }
+  }
+
+  func test_replace_addingCount_full() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 0 ..< subrange.count + layout.freeCapacity) { c in
+          withLifetimeTracking { tracker in
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+            a.replace(removing: subrange, addingCount: c) { target in
+              expectEqual(target.freeCapacity, c)
+              for i in 0 ..< c {
+                target.append(tracker.instance(for: layout.count + i))
+              }
+            }
+
+            var expected = Array(0 ..< layout.count)
+            expected.replaceSubrange(
+              subrange,
+              with: layout.count ..< layout.count + c)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+          }
+        }
+      }
+    }
+  }
+
+  func test_replace_addingCount_partial() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      guard !layout.isFull else { return }
+      withEveryRange("subrange", in: 0 ..< layout.count) { subrange in
+        withEvery("c", in: 1 ..< layout.freeCapacity) { c in
+          withEvery("n", in: [0, 1, c / 2, c - 1] as Set) { n in
+            withLifetimeTracking { tracker in
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+
+              a.replace(removing: subrange, addingCount: c) { target in
+                expectTrue(target.isEmpty)
+                expectEqual(target.freeCapacity, c)
+                for i in 0 ..< n {
+                  target.append(tracker.instance(for: layout.count + i))
+                }
+              }
+              expectEqual(a.count, layout.count - subrange.count + n)
+
+              var expected = Array(0 ..< layout.count)
+              expected.replaceSubrange(
+                subrange,
+                with: layout.count ..< layout.count + n)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+            }
+          }
+        }
+      }
+    }
+  }
+
+  func test_replace_Collection() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("isContiguous", in: [false, true]) { isContiguous in
+          withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+            withLifetimeTracking { tracker in
+              var expected = Array(0 ..< layout.count)
+              let addition = (0 ..< c).map { -100 - $0 }
+              expected.replaceSubrange(range, with: addition)
+
+              let trackedAddition = MinimalCollection(
+                addition.map { tracker.instance(for: $0) },
+                isContiguous: isContiguous)
+              var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+              a.replace(removing: range, copying: trackedAddition)
+
+              expectFixedArrayContents(
+                a,
+                equivalentTo: expected,
+                by: { $0.payload == $1 },
+                printer: { "\($0.payload)" })
+              expectEqual(tracker.instances, layout.count - range.count + c)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  func test_replace_Span() {
+    do {
+      let layout = ArrayLayout(capacity: 0, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 0)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 1)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 2)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 5)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 8)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 9)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
+      }
+    }
+    do {
+      let layout = ArrayLayout(capacity: 10, count: 10)
+      withEveryRange("range", in: 0 ..< layout.count) { range in
+        withEvery("c", in: 0 ..< layout.capacity - layout.count + range.count) { c in
+          withLifetimeTracking { tracker in
+            var expected = Array(0 ..< layout.count)
+            let addition = (0 ..< c).map { -100 - $0 }
+            expected.replaceSubrange(range, with: addition)
+
+            var a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+            let trackedAddition = RigidArray(copying: addition.map { tracker.instance(for: $0) })
+            a.replace(removing: range, copying: trackedAddition.span)
+
+            expectFixedArrayContents(
+              a,
+              equivalentTo: expected,
+              by: { $0.payload == $1 },
+              printer: { "\($0.payload)" })
+            expectEqual(tracker.instances, layout.count - range.count + c)
+          }
+        }
       }
     }
   }
@@ -5091,6 +8279,73 @@ class FixedArrayTests: CollectionTestCase {
           }
         }
         expectTrue(goodHash, "Hashing does not differentiate between inequal containers")
+      }
+    }
+  }
+
+  func test_descriptions() {
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 0, count: 0)
+        let a = FixedArray<0, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 0)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 1)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 2)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 5)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 8)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 9)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
+      }
+    }
+    do {
+      withLifetimeTracking { tracker in
+        let layout = ArrayLayout(capacity: 10, count: 10)
+        let a = FixedArray<10, _>(layout: layout) { tracker.instance(for: $0) }
+        expectEqual(a.description, "<\(layout.count) items>")
+        expectEqual(a.debugDescription, "<\(layout.count) items>")
       }
     }
   }

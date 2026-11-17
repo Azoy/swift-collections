@@ -319,11 +319,55 @@ extension FixedArray where Element: ~Copyable {
     count: Int
   ) {
     guard count > 0 else { return }
-    let source = unsafe _items.extracting(
+    let source = unsafe _storage.buffer.extracting(
       Range(uncheckedBounds: (index + count, _count)))
-    let target = unsafe _items.extracting(
+    let target = unsafe _storage.buffer.extracting(
       Range(uncheckedBounds: (index, index + source.count)))
     let i = unsafe target.moveInitialize(fromContentsOf: source)
     assert(i == target.endIndex)
+  }
+
+  @export(implementation)
+  @unsafe
+  internal mutating func _openGap(
+    at index: Int, count: Int
+  ) -> UnsafeMutableBufferPointer<Element> {
+    assert(index >= 0 && index <= _count)
+    assert(count <= freeCapacity)
+    guard count > 0 else { return unsafe _storage.buffer.extracting(index ..< index) }
+    let source = unsafe _storage.buffer.extracting(
+      Range(uncheckedBounds: (index, _count)))
+    let target = unsafe _storage.buffer.extracting(
+      Range(uncheckedBounds: (index + count, _count + count)))
+    let i = unsafe target.moveInitialize(fromContentsOf: source)
+    assert(i == target.count)
+    return unsafe _storage.buffer.extracting(
+      Range(uncheckedBounds: (index, index + count)))
+  }
+
+  /// Resize the gap in the given subrange to have the specified count.
+  /// This operation moves elements following the gap to be at their expected
+  /// new location, and it adjusts the container's count to reflect the change.
+  ///
+  /// - Returns: A buffer pointer addressing the newly opened gap, to be
+  ///     initialized by the caller.
+  @export(implementation)
+  @unsafe
+  internal mutating func _resizeGap(
+    in subrange: Range<Int>, to newItemCount: Int
+  ) -> UnsafeMutableBufferPointer<Element> {
+    assert(subrange.lowerBound >= 0 && subrange.upperBound <= _count)
+    assert(newItemCount >= 0 && newItemCount - subrange.count <= freeCapacity)
+    if newItemCount > subrange.count {
+      _ = unsafe _openGap(
+        at: subrange.upperBound, count: newItemCount - subrange.count)
+    } else if newItemCount < subrange.count {
+      _closeGap(
+        at: subrange.lowerBound + newItemCount, count: subrange.count - newItemCount)
+    }
+    _count += newItemCount - subrange.count
+    let gapRange = unsafe Range(
+      uncheckedBounds: (subrange.lowerBound, subrange.lowerBound + newItemCount))
+    return unsafe _storage.buffer.extracting(gapRange)
   }
 }
